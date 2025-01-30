@@ -41,6 +41,8 @@ public class ObjectPool : MonoBehaviour
 
     public GameObject SpawnFromPool(string tag, Vector3 position, Quaternion rotation)
     {
+        if(poolDictionary == null)
+            poolDictionary = new Dictionary<string, Queue<GameObject>>();
         if (!poolDictionary.ContainsKey(tag)) return null;
 
         GameObject objectToSpawn = poolDictionary[tag].Dequeue();

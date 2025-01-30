@@ -38,13 +38,14 @@ public class TerrainManager : MonoBehaviour
 
     public void SpawnNextTerrain()
     {
+        Debug.Log("Spawning next terrain at: " + nextSpawnPosition);
         // Get a terrain from the pool
         GameObject terrain = terrainPool.Dequeue();
         terrain.SetActive(true);
         terrain.transform.position = nextSpawnPosition;
 
         // Update the next spawn position
-        nextSpawnPosition += Vector3.forward * 10f;
+        nextSpawnPosition += Vector3.forward * terrainLength;
 
         // Return the terrain to the pool after it moves forward
         terrainPool.Enqueue(terrain);

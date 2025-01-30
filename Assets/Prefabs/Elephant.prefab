@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 4828161430097813329}
   - component: {fileID: 6599398410066101967}
+  - component: {fileID: 6270934686686371931}
+  - component: {fileID: 4879516140350234629}
   - component: {fileID: 4654457439137855861}
   - component: {fileID: 2031989248830119107}
-  - component: {fileID: 6270934686686371931}
-  - component: {fileID: 4835157691528291312}
   m_Layer: 0
   m_Name: Elephant
   m_TagString: Elephant
@@ -44,6 +44,32 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7686472876434514311}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &6270934686686371931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7686472876434514311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf4660e117acdc44ab0ba9988998cb5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 4
+  respawnThreshold: 30
+--- !u!114 &4879516140350234629
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7686472876434514311}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51851c7f6dad4f94eadda41f29516bf9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!23 &4654457439137855861
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -107,31 +133,3 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6270934686686371931
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7686472876434514311}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cf4660e117acdc44ab0ba9988998cb5f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 0
-  respawnThreshold: 30
---- !u!114 &4835157691528291312
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7686472876434514311}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 679ea1f53e3608246942b3aa861f4490, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  minX: -9
-  maxX: 9

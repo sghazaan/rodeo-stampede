@@ -9,6 +9,7 @@ TagManager:
   - Horse
   - Elephant
   - Bull
+  - Terrain
   layers:
   - Default
   - TransparentFX

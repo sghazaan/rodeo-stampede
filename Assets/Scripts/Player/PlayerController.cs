@@ -7,12 +7,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed;
     [SerializeField] private float dragSensitivity;
     private bool isHolding = false; // To track if the user is holding down
+    private bool isGrounded;
     private Vector2 touchStartPos; // To store the position where touch started
     private Vector2 touchCurrentPos; // To store the current touch position
 
     void Update()
     {
-
+        // Move the player forward
+        transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
          // Primary Down: Touch starts
         if (Input.GetMouseButtonDown(0))
         {
@@ -22,9 +24,7 @@ public class PlayerController : MonoBehaviour
         }
         // Primary Down Stay: Detect dragging
         if (Input.GetMouseButton(0) && isHolding)
-        {
-            // Move the player forward
-            transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+        { 
             touchCurrentPos = Input.mousePosition; // Update the current position
 
             float dragDistance = touchCurrentPos.x - touchStartPos.x;
@@ -51,21 +51,38 @@ public class PlayerController : MonoBehaviour
         {
             isHolding = false;
             Debug.Log("Touch Ended at: " + Input.mousePosition);
-            if (playerRigidbody != null)
+            if (isGrounded)
             {
-                playerRigidbody.velocity = new Vector3(playerRigidbody.velocity.x, 0f, playerRigidbody.velocity.z); // Reset vertical velocity
+               playerRigidbody.velocity = new Vector3(playerRigidbody.velocity.x, 0f, playerRigidbody.velocity.z); // Reset vertical velocity
                 playerRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse); // Apply jump force
             }
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("TerrainEnd"))
-        {
-            // Trigger terrain pooling/spawning logic when reaching the end
-            Debug.Log("Reached the end of the terrain!");
-            TerrainManager.Instance.SpawnNextTerrain();
-        }
-    }
+    // private void OnCollisionEnter(Collision other)
+    // {
+    //     if (other.gameObject.CompareTag("TerrainEnd"))
+    //     {
+    //         // Trigger terrain pooling/spawning logic when reaching the end
+    //         Debug.Log("Reached the end of the terrain!");
+    //         TerrainManager.Instance.SpawnNextTerrain();
+    //     }
+    // }
+
+    // Detect ground collision
+    // private void OnCollisionEnter(Collision collision)
+    // {
+    //     if (collision.gameObject.CompareTag("Terrain")) 
+    //     {
+    //         isGrounded = true;
+    //     }
+    // }
+
+    // private void OnCollisionExit(Collision collision)
+    // {
+    //     if (collision.gameObject.CompareTag("Terrain")) 
+    //     {
+    //         isGrounded = false;
+    //     }
+    // }
 }
