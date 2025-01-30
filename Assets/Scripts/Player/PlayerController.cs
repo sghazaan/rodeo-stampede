@@ -59,15 +59,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // private void OnCollisionEnter(Collision other)
-    // {
-    //     if (other.gameObject.CompareTag("TerrainEnd"))
-    //     {
-    //         // Trigger terrain pooling/spawning logic when reaching the end
-    //         Debug.Log("Reached the end of the terrain!");
-    //         TerrainManager.Instance.SpawnNextTerrain();
-    //     }
-    // }
+    
 
     // Detect ground collision
     // private void OnCollisionEnter(Collision collision)
