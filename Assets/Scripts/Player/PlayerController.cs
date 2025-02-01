@@ -2,30 +2,95 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public Rigidbody playerRigidbody; // Assign the player's Rigidbody in the Inspector
-    public float jumpForce = 5f;      // Jump force to apply
+    public Rigidbody playerRigidbody; // Assign in Inspector
+    public float jumpForce;      // Jump force to apply
     [SerializeField] private float moveSpeed;
     [SerializeField] private float dragSensitivity;
-    private bool isHolding = false; // To track if the user is holding down
-    private bool isGrounded;
-    private Vector2 touchStartPos; // To store the position where touch started
-    private Vector2 touchCurrentPos; // To store the current touch position
+    
+    private bool isHolding = false;   // Tracks if the user is holding down
+    private bool canJump = false;     // Only allow jumping when user releases after holding
+    private bool isJumping = false;   // Tracks if the player is currently in the air
 
+    private Vector2 touchStartPos;    // Store the position where touch started
+    private Vector2 touchCurrentPos;  // Store the current touch position
+
+    float riddenYPos; // Y position of the player when riding an animal
+    bool isRiding = false; // Whether the player is riding an animal
+
+    void OnEnable()
+    {
+        EventHub.OnAnimalRidden += OnAnimalRidden;
+    }
+
+    void OnDisable()
+    {
+        EventHub.OnAnimalRidden -= OnAnimalRidden;
+    }
     void Update()
     {
         // Move the player forward
         transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
-         // Primary Down: Touch starts
+        if(isRiding)
+        {
+            transform.position = new Vector3(transform.position.x, riddenYPos, transform.position.z);
+        }
+
+        // Detect touch start
         if (Input.GetMouseButtonDown(0))
         {
             isHolding = true;
-            touchStartPos = Input.mousePosition; // Save the starting position
+            touchStartPos = Input.mousePosition;
+            
+            // Only allow jumping if the player is grounded
+            if (!isJumping)
+            {
+                canJump = true;  // Enable jump when releasing
+            }
+
             Debug.Log("Touch Started at: " + touchStartPos);
         }
-        // Primary Down Stay: Detect dragging
+
+        Dragging();
+
+        // Detect touch release & trigger jump
+        if (isHolding && !Input.GetMouseButton(0))
+        {
+            isHolding = false;
+
+            // Jump only if we were allowed to jump before release
+            if (canJump && !isJumping)
+            {
+                Jump();
+            }
+
+            // Reset jump permission so it doesn't trigger multiple times
+            canJump = false;
+        }
+    }
+
+    private void Jump()
+    {
+        Debug.Log("Jumping");
+        playerRigidbody.velocity = new Vector3(playerRigidbody.velocity.x, 0f, playerRigidbody.velocity.z);
+        playerRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        isJumping = true;  // Set jumping state
+    }
+
+    // Detect ground collision
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Terrain"))
+        {
+            isJumping = false;  // Allow jumping again when landed
+        }
+    }
+
+    void Dragging()
+    {
+        // Detect dragging
         if (Input.GetMouseButton(0) && isHolding)
         { 
-            touchCurrentPos = Input.mousePosition; // Update the current position
+            touchCurrentPos = Input.mousePosition;
 
             float dragDistance = touchCurrentPos.x - touchStartPos.x;
             if (Mathf.Abs(dragDistance) > 50) // Adjust threshold for dragging
@@ -45,36 +110,15 @@ public class PlayerController : MonoBehaviour
                 touchStartPos = touchCurrentPos;
             }
         }
-
-        // Primary Up: Touch ends
-        if (Input.GetMouseButtonUp(0))
-        {
-            isHolding = false;
-            Debug.Log("Touch Ended at: " + Input.mousePosition);
-            if (isGrounded)
-            {
-               playerRigidbody.velocity = new Vector3(playerRigidbody.velocity.x, 0f, playerRigidbody.velocity.z); // Reset vertical velocity
-                playerRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse); // Apply jump force
-            }
-        }
     }
 
-    
-
-    // Detect ground collision
-    // private void OnCollisionEnter(Collision collision)
-    // {
-    //     if (collision.gameObject.CompareTag("Terrain")) 
-    //     {
-    //         isGrounded = true;
-    //     }
-    // }
-
-    // private void OnCollisionExit(Collision collision)
-    // {
-    //     if (collision.gameObject.CompareTag("Terrain")) 
-    //     {
-    //         isGrounded = false;
-    //     }
-    // }
+    private void OnAnimalRidden(float yPos)
+    {
+        Debug.Log("animal yPos: " + yPos);
+        riddenYPos = (yPos * 2f) + transform.position.y;
+        transform.position = new Vector3(transform.position.x, riddenYPos, transform.position.z);
+        isRiding = true;
+        // Disable player controls when riding an animal
+        //enabled = false;
+    }
 }

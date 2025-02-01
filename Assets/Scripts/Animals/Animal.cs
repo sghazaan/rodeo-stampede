@@ -6,6 +6,7 @@ public class Animal : MonoBehaviour
     protected bool isRidden = false; // Whether the player is riding this animal
     protected Transform player; // Reference to the player transform
     public float respawnThreshold = 30f; // Distance behind the player to deactivate
+    bool isRidingDone = false; // Whether the player has finished riding
 
     public virtual void Initialize(Transform playerTransform, float animalSpeed)
     {
@@ -41,6 +42,7 @@ public class Animal : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             isRidden = true;
+            EventHub.InvokeAnimalRidden(transform.position.y);
         }
     }
 

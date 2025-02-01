@@ -55,7 +55,7 @@ public class AnimalSpawner : MonoBehaviour
         if (animalObject.TryGetComponent(out Animal animal))
         {
             animal.Initialize(player, animal.speed);
-            Debug.Log("Animal spawned at: " + spawnPosition);
+            //Debug.Log("Animal spawned at: " + spawnPosition);
         }
     }
 }
