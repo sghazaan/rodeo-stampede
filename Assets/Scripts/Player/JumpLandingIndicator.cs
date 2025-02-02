@@ -11,6 +11,8 @@ public class JumpLandingIndicator : MonoBehaviour
     private HashSet<Renderer> highlightedAnimals = new HashSet<Renderer>(); // Track colored animals
     private Dictionary<Renderer, Color> originalColors = new Dictionary<Renderer, Color>(); // Store original colors
     private Renderer animalRenderer;
+    HashSet<Renderer> currentAnimals;
+    Collider[] overlappedColliders;
     void Start()
     {
         circleRenderer = GetComponent<Renderer>();
@@ -25,9 +27,9 @@ public class JumpLandingIndicator : MonoBehaviour
         transform.position = new Vector3(player.position.x, 0f, player.position.z + forwardOffset);
 
         // Check for animals inside the circle
-        Collider[] colliders = Physics.OverlapSphere(transform.position, radius);
-          HashSet<Renderer> currentAnimals = new HashSet<Renderer>();
-        foreach (Collider col in colliders)
+        overlappedColliders = Physics.OverlapSphere(transform.position, radius);
+        currentAnimals = new HashSet<Renderer>();
+        foreach (Collider col in overlappedColliders)
         {
             if (col.gameObject.layer == LayerMask.NameToLayer("Animal"))
             {
@@ -43,11 +45,11 @@ public class JumpLandingIndicator : MonoBehaviour
                 }
 
                 // If user taps while jumping & an animal is inside the circle, land on the animal
-                // if (Input.GetMouseButtonDown(0))
-                // {
-                //     LandOnAnimal(col.transform);
-                //     return;
-                // }
+                if (Input.GetMouseButtonDown(0))
+                {
+                    LandOnAnimal(col.transform);
+                    return;
+                }
             }
         }
 
@@ -73,7 +75,7 @@ public class JumpLandingIndicator : MonoBehaviour
         circleRenderer.enabled = false;
 
         // Move player to animal's position (land on the animal)
-        player.position = new Vector3(animal.position.x, animal.position.y + 1f, animal.position.z);
+        player.position = new Vector3(animal.position.x, animal.position.y + 0.5f, animal.position.z);
 
          // Reset animal colors
         RestoreAnimalColors(new HashSet<Renderer>());

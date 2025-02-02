@@ -110,7 +110,7 @@ public class PlayerController : MonoBehaviour
         playerRigidbody.velocity = new Vector3(playerRigidbody.velocity.x, 0f, playerRigidbody.velocity.z);
         playerRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         // Apply forward force to boost movement
-        playerRigidbody.AddForce(transform.forward * (jumpForce * 0.5f), ForceMode.Impulse);
+        //playerRigidbody.AddForce(transform.forward * (jumpForce * 0.5f), ForceMode.Impulse);
         isJumping = true;
         jumpLandingIndicator.StartJump();
         HandleDismount();
@@ -183,20 +183,20 @@ public class PlayerController : MonoBehaviour
 
         // Disable player drag controls when riding an animal
         
-        PlayerLandedOnAnimal();
+        ResetJumpVariables();
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Terrain"))
         {
-            PlayerLandedOnAnimal();
+            ResetJumpVariables();
             // Re-enable physics collider
             //if (physicsCollider != null) physicsCollider.enabled = true;
         }
     }
 
-    public void PlayerLandedOnAnimal()
+    public void ResetJumpVariables()
     {
         isJumping = false;
         canJump = true;

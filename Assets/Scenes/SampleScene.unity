@@ -1328,18 +1328,6 @@ MonoBehaviour:
   landingIndicator: {fileID: 237207701}
   startButton: {fileID: 839520552}
   restartButton: {fileID: 1273551914}
---- !u!65 &1482539262 stripped
-BoxCollider:
-  m_CorrespondingSourceObject: {fileID: 793453270394160051, guid: e7b8ad65f6b55e247a19028c097050de,
-    type: 3}
-  m_PrefabInstance: {fileID: 5522893237307096339}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &1570323847 stripped
-BoxCollider:
-  m_CorrespondingSourceObject: {fileID: 4570077947371408845, guid: e7b8ad65f6b55e247a19028c097050de,
-    type: 3}
-  m_PrefabInstance: {fileID: 5522893237307096339}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1589452670
 GameObject:
   m_ObjectHideFlags: 0
@@ -1867,34 +1855,9 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
-      propertyPath: jumpForce
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
-        type: 3}
-      propertyPath: moveSpeed
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
-        type: 3}
       propertyPath: distanceText
       value: 
       objectReference: {fileID: 551029911}
-    - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
-        type: 3}
-      propertyPath: rotationAngle
-      value: 15
-      objectReference: {fileID: 0}
-    - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
-        type: 3}
-      propertyPath: physicsCollider
-      value: 
-      objectReference: {fileID: 1482539262}
-    - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
-        type: 3}
-      propertyPath: triggerCollider
-      value: 
-      objectReference: {fileID: 1570323847}
     - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
       propertyPath: jumpLandingIndicator
@@ -1902,23 +1865,18 @@ PrefabInstance:
       objectReference: {fileID: 237207701}
     - target: {fileID: 4275886343663937436, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
-      propertyPath: m_Constraints
-      value: 80
+      propertyPath: m_AngularDrag
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 4275886343663937436, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
-      propertyPath: m_CollisionDetection
-      value: 1
+      propertyPath: m_Constraints
+      value: 122
       objectReference: {fileID: 0}
     - target: {fileID: 4770629319200029206, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 4770629319200029206, guid: e7b8ad65f6b55e247a19028c097050de,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7181505072262159763, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
