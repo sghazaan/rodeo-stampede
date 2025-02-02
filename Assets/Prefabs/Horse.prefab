@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5581705688798787657}
   - component: {fileID: 2959401626166122634}
   - component: {fileID: 2031989248830119107}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Horse
   m_TagString: Horse
   m_Icon: {fileID: 0}
@@ -99,6 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
+  isRidden: 0
   respawnThreshold: 30
 --- !u!114 &2959401626166122634
 MonoBehaviour:

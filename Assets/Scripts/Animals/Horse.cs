@@ -4,6 +4,6 @@ public class Horse : Animal
 {
     private void Start()
     {
-        speed = Random.Range(5f, 6f);
+        speed = Random.Range(1f, 2f);
     }
 }

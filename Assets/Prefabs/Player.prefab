@@ -167,9 +167,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerRigidbody: {fileID: 4275886343663937436}
-  jumpForce: 5
-  moveSpeed: 8
-  dragSensitivity: 0.2
+  jumpForce: 10
+  moveSpeed: 16
+  dragSensitivity: 2
+  rotationAngle: 25
+  distanceText: {fileID: 0}
 --- !u!114 &2927704103935593105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -213,7 +215,7 @@ Rigidbody:
   serializedVersion: 4
   m_Mass: 1
   m_Drag: 0
-  m_AngularDrag: 0.05
+  m_AngularDrag: 0
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}

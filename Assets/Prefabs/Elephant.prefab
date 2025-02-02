@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 4879516140350234629}
   - component: {fileID: 4654457439137855861}
   - component: {fileID: 2031989248830119107}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Elephant
   m_TagString: Elephant
   m_Icon: {fileID: 0}
@@ -57,6 +57,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 4
+  isRidden: 0
   respawnThreshold: 30
 --- !u!114 &4879516140350234629
 MonoBehaviour:

@@ -3,7 +3,7 @@ using UnityEngine;
 public class Animal : MonoBehaviour
 {
     public float speed; // Speed of the animal
-    protected bool isRidden = false; // Whether the player is riding this animal
+    public bool isRidden = false; // Whether the player is riding this animal
     protected Transform player; // Reference to the player transform
     public float respawnThreshold = 30f; // Distance behind the player to deactivate
     bool isRidingDone = false; // Whether the player has finished riding
@@ -17,6 +17,10 @@ public class Animal : MonoBehaviour
 
     protected virtual void Update()
     {
+        if(GameManager.IsGameLost)
+        {
+            return;
+        }
         if (isRidden)
         {
             // Follow the player position
@@ -41,8 +45,26 @@ public class Animal : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            if(!isRidden && GameManager.IsPlayerRiding)
+            {
+                GameManager.IsGameLost = true;
+                Debug.Log("Game Over! Animal - Player");
+                return;
+            }
             isRidden = true;
-            EventHub.InvokeAnimalRidden(transform.position.y);
+            EventHub.InvokeAnimalRidden(transform.position.y, this);
+        }
+        //compare layer to amimal layer
+        else if(other.gameObject.layer == LayerMask.NameToLayer("Animal"))
+        {
+            if(GameManager.IsPlayerRiding)
+            {
+                if(other.gameObject.GetComponent<Animal>().isRidden)
+                {
+                    GameManager.IsGameLost = true;
+                    Debug.Log("Game Over! Animal - Animal");
+                }
+            }
         }
     }
 

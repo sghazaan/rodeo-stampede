@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7214499728601154136}
   - component: {fileID: 6247098506176646180}
   - component: {fileID: 2031989248830119107}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Bull
   m_TagString: Bull
   m_Icon: {fileID: 0}
@@ -99,6 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 4
+  isRidden: 0
   respawnThreshold: 30
 --- !u!114 &6247098506176646180
 MonoBehaviour:
