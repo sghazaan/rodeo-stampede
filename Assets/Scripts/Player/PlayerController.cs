@@ -19,7 +19,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private Collider physicsCollider; // Assign the non-trigger collider
 
     [Header("Position Settings")]
-    [SerializeField] private float playerVerticalPosition = 1f;
+    [SerializeField] private float playerVerticalPosition = 0.5f;
     private Vector3 startPosition;
     private float distanceTraveled;
 
@@ -48,49 +48,31 @@ public class PlayerController : MonoBehaviour
     private void InitializePlayer()
     {
         startPosition = transform.position;
-        if (playerRigidbody != null)
-        {
-            playerRigidbody.interpolation = RigidbodyInterpolation.Interpolate;
-            playerRigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
-            playerRigidbody.freezeRotation = true;
-            playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation | 
-                                        RigidbodyConstraints.FreezePositionX;
-        }
-        moveVelocity = Vector3.forward * moveSpeed;
+        // if (playerRigidbody != null)
+        // {
+        //     playerRigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+        //     playerRigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
+        //     playerRigidbody.freezeRotation = true;
+        //     playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation | 
+        //                                 RigidbodyConstraints.FreezePositionX;
+        // }
+        //moveVelocity = Vector3.forward * moveSpeed;
     }
 
     private void Update()
     {
         if (GameManager.IsGameOver) return;
-
+        MovePlayer();
         HandleInput();
         UpdateDistanceUI();
     }
 
-    private void FixedUpdate()
-    {
-        if (GameManager.IsGameOver) return;
-        MovePlayer();
-    }
-
     private void MovePlayer()
     {
+        transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
         if (isRiding && !isJumping)
         {
-            // When riding, use position-based movement
-            Vector3 newPosition = transform.position + (moveVelocity * Time.fixedDeltaTime);
-            newPosition.y = riddenYPos;
-            transform.position = newPosition;
-            
-            // Set rigidbody velocity to zero to prevent physics interference
-            playerRigidbody.velocity = Vector3.zero;
-        }
-        else
-        {
-            // During normal movement or jumping, use rigidbody
-            Vector3 currentVel = playerRigidbody.velocity;
-            currentVel.z = moveSpeed;
-            playerRigidbody.velocity = currentVel;
+            transform.position = new Vector3(transform.position.x, riddenYPos, transform.position.z);
         }
     }
 
@@ -124,15 +106,13 @@ public class PlayerController : MonoBehaviour
     {
         isHolding = false;
         if (!canJump || isJumping) return;
-
+        Debug.Log("Jumping");
+        playerRigidbody.velocity = new Vector3(playerRigidbody.velocity.x, 0f, playerRigidbody.velocity.z);
+        playerRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        // Apply forward force to boost movement
+        playerRigidbody.AddForce(transform.forward * (jumpForce * 0.5f), ForceMode.Impulse);
         isJumping = true;
         jumpLandingIndicator.StartJump();
-
-        // Maintain forward velocity while adding upward force
-        Vector3 jumpVelocity = playerRigidbody.velocity;
-        jumpVelocity.y = jumpForce;
-        playerRigidbody.velocity = jumpVelocity;
-
         HandleDismount();
         canJump = false;
     }
@@ -155,9 +135,11 @@ public class PlayerController : MonoBehaviour
         if (Mathf.Abs(dragDistance) > 50)
         {
             float rotationAmount = Mathf.Clamp(dragDistance * 0.25f, -rotationAngle, rotationAngle);
-            transform.Rotate(0, rotationAmount, 0);
+             transform.rotation = Quaternion.Euler(0, rotationAmount, 0); // Rotate on Y-axis
+            Debug.Log("Rotating: " + rotationAmount);
             touchStartPos = touchCurrentPos;
-            StopAllCoroutines();
+            // Stop any running reset coroutine to prevent interference
+            StopCoroutine(nameof(ResetRotationSmoothly));
         }
         else if (!isResettingRotation)
         {
@@ -197,7 +179,9 @@ public class PlayerController : MonoBehaviour
         riddenAnimal = animal;
         
         // Disable physics collider when riding
-        if (physicsCollider != null) physicsCollider.enabled = false;
+        //if (physicsCollider != null) physicsCollider.enabled = false;
+
+        // Disable player drag controls when riding an animal
         
         PlayerLandedOnAnimal();
     }
@@ -208,7 +192,7 @@ public class PlayerController : MonoBehaviour
         {
             PlayerLandedOnAnimal();
             // Re-enable physics collider
-            if (physicsCollider != null) physicsCollider.enabled = true;
+            //if (physicsCollider != null) physicsCollider.enabled = true;
         }
     }
 

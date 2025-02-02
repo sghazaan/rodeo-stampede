@@ -1883,7 +1883,7 @@ PrefabInstance:
     - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
       propertyPath: rotationAngle
-      value: 10
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
@@ -1914,6 +1914,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 4770629319200029206, guid: e7b8ad65f6b55e247a19028c097050de,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7181505072262159763, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
@@ -1983,11 +1988,6 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 520766404}
-    - target: {fileID: 183996958519709433, guid: 376dcffc269c56a4e9e4c4aca8de9d3f,
-        type: 3}
-      propertyPath: forwardOffset
-      value: 2.5
-      objectReference: {fileID: 0}
     - target: {fileID: 1445527609482511923, guid: 376dcffc269c56a4e9e4c4aca8de9d3f,
         type: 3}
       propertyPath: m_LocalPosition.x

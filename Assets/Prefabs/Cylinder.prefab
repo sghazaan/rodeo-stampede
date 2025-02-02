@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  forwardOffset: 0.5
+  forwardOffset: 2.5
   radius: 1
 --- !u!33 &8703789176102656915
 MeshFilter:
