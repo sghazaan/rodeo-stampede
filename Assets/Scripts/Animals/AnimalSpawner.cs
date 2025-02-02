@@ -16,13 +16,9 @@ public class AnimalSpawner : MonoBehaviour
         Instance = this;
     }
 
-    private void Start()
+   
+    public void SpawnInitialAnimals()
     {
-        StartCoroutine(WaitThenSpawn());
-    }
-    IEnumerator WaitThenSpawn()
-    {
-        yield return new WaitForSeconds(2f);
         Debug.Log("Spawning intial set of animals");
         // Spawn initial set of animals
         for (int i = 0; i < initialSpawnCount; i++)

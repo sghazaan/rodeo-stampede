@@ -4,172 +4,199 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public Rigidbody playerRigidbody; // Assign in Inspector
-    public float jumpForce;      // Jump force to apply
-    [SerializeField] private float moveSpeed;
-    [SerializeField] private float dragSensitivity;
-    [SerializeField] private float rotationAngle;
+    [Header("Movement Settings")]
+    [SerializeField] private float moveSpeed = 10f;
+    [SerializeField] private float rotationAngle = 45f;
+    [SerializeField] private float jumpForce = 8f;
+
+    [Header("References")]
     [SerializeField] private JumpLandingIndicator jumpLandingIndicator;
-     public TextMeshProUGUI distanceText; 
-    
-    private bool isHolding = false;   // Tracks if the user is holding down
-    private bool canJump = false;     // Only allow jumping when user releases after holding
-    private bool isJumping = false;   // Tracks if the player is currently in the air
+    [SerializeField] private TextMeshProUGUI distanceText;
+    public Rigidbody playerRigidbody;
 
-    private Vector2 touchStartPos;    // Store the position where touch started
-    private Vector2 touchCurrentPos;  // Store the current touch position
+    [Header("Position Settings")]
+    [SerializeField] private float playerVerticalPosition = 1f;
+    private Vector3 startPosition;
+    private float distanceTraveled;
 
-    float riddenYPos; // Y position of the player when riding an animal
-    bool isRiding = false; // Whether the player is riding an animal
+    [Header("Movement State")]
+    private bool isJumping;
+    private bool isRiding;
+    private float riddenYPos;
     private Animal riddenAnimal;
 
-    private Vector3 startPosition;
-    private float distanceTraveled = 0f;
+    [Header("Touch Controls")]
+    private bool isHolding;
+    private bool canJump;
+    private bool isResettingRotation;
+    private Vector2 touchStartPos;
+    private Vector2 touchCurrentPos;
 
-    void OnEnable()
+    private void OnEnable() => EventHub.OnAnimalRidden += OnAnimalRidden;
+    private void OnDisable() => EventHub.OnAnimalRidden -= OnAnimalRidden;
+
+    private void Start()
     {
-        EventHub.OnAnimalRidden += OnAnimalRidden;
+        InitializePlayer();
     }
 
-    void OnDisable()
+    private void InitializePlayer()
     {
-        EventHub.OnAnimalRidden -= OnAnimalRidden;
-    }
-
-    void Start()
-    {
-        startPosition = transform.position; // Save the starting position
-    }
-    void Update()
-    {
-        if(GameManager.IsGameLost)
+        startPosition = transform.position;
+        if (playerRigidbody != null)
         {
-            return;
+            playerRigidbody.freezeRotation = true;
+            playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionX;
         }
-        // Move the player forward
-        transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
-        if(isRiding && !isJumping)
-        {
-            transform.position = new Vector3(transform.position.x, riddenYPos, transform.position.z);
-        }
-        TouchStart();
-        // Detect dragging
+    }
+
+    private void Update()
+    {
+        if (GameManager.IsGameOver) return;
+
+        HandleInput();
+        UpdateDistanceUI();
+    }
+
+    private void FixedUpdate()
+    {
+        if (GameManager.IsGameOver) return;
+        MovePlayer();
+    }
+
+    private void HandleInput()
+    {
+        HandleTouchStart();
         if (Input.GetMouseButton(0) && isHolding)
-        { 
-            OnDragging();
+        {
+            HandleDragging();
         }
-         // Detect touch release & trigger jump
         if (isHolding && !Input.GetMouseButton(0))
         {
-            Jump();
+            HandleJump();
         }
-        distanceTraveled = transform.position.z - startPosition.z;
-        if (distanceText != null)
-        {
-            distanceText.text = "Distance: " + Mathf.FloorToInt(distanceTraveled) + "m"; 
-        }
-
-        
     }
 
-    private void TouchStart()
+    private void MovePlayer()
     {
-        // Detect touch start
+        Vector3 forwardMovement = Vector3.forward * moveSpeed * Time.fixedDeltaTime;
+        
+        if (isRiding && !isJumping)
+        {
+            // When riding, maintain Y position
+            transform.position = new Vector3(transform.position.x, riddenYPos, transform.position.z);
+        }
+        
+        // Always move forward using Translate
+        transform.Translate(forwardMovement, Space.World);
+    }
+
+    private void HandleTouchStart()
+    {
         if (Input.GetMouseButtonDown(0))
         {
             isHolding = true;
             touchStartPos = Input.mousePosition;
-            
-            // Only allow jumping if the player is grounded
             if (!isJumping)
             {
-                canJump = true;  // Enable jump when releasing
+                canJump = true;
             }
-
-            Debug.Log("Touch Started at: " + touchStartPos);
         }
     }
 
-    private void Jump()
+    private void HandleJump()
     {
         isHolding = false;
-        // Jump only if we were allowed to jump before release
-        if (canJump && !isJumping)
-        {
-            Debug.Log("Jumping");
-            playerRigidbody.velocity = new Vector3(playerRigidbody.velocity.x, 0f, playerRigidbody.velocity.z);
-            playerRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            // Apply forward force to boost movement
-            playerRigidbody.AddForce(transform.forward * (jumpForce * 0.5f), ForceMode.Impulse);
-            isJumping = true;  // Set jumping state
-            jumpLandingIndicator.StartJump(); 
-            if(riddenAnimal != null)
-            {
-                riddenAnimal.isRidden = false;
-                riddenAnimal = null;
-                isRiding = false;
-                GameManager.IsPlayerRiding = false;
-            }
-        }
-        // Reset jump permission so it doesn't trigger multiple times
+        if (!canJump || isJumping) return;
+
+        isJumping = true;
+        jumpLandingIndicator.StartJump();
+
+        // Only modify the Y component of velocity for the jump
+        Vector3 currentVel = playerRigidbody.velocity;
+        currentVel.y = 0f; // Reset only vertical velocity
+        playerRigidbody.velocity = currentVel;
+        
+        // Add upward force for jump
+        playerRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+
+        HandleDismount();
         canJump = false;
     }
 
-    void OnDragging()
+    private void HandleDismount()
+    {
+        if (riddenAnimal == null) return;
+
+        riddenAnimal.isRidden = false;
+        riddenAnimal = null;
+        isRiding = false;
+        GameManager.IsPlayerRiding = false;
+    }
+
+    private void HandleDragging()
     {
         touchCurrentPos = Input.mousePosition;
         float dragDistance = touchCurrentPos.x - touchStartPos.x;
-        if (Mathf.Abs(dragDistance) > 50) // Adjust threshold for dragging
+        
+        if (Mathf.Abs(dragDistance) > 50)
         {
-            float rotationAmount = Mathf.Clamp(dragDistance * 0.25f, -rotationAngle, rotationAngle); // Limit rotation range
-            transform.rotation = Quaternion.Euler(0, rotationAmount, 0); // Rotate on Y-axis
-            Debug.Log("Rotating: " + rotationAmount);
+            float rotationAmount = Mathf.Clamp(dragDistance * 0.25f, -rotationAngle, rotationAngle);
+            transform.Rotate(0, rotationAmount, 0);
             touchStartPos = touchCurrentPos;
-            // Stop any running reset coroutine to prevent interference
-            StopCoroutine(nameof(ResetRotationSmoothly));
+            StopAllCoroutines();
         }
-        else if (!IsInvoking(nameof(ResetRotationSmoothly)))
+        else if (!isResettingRotation)
         {
-            // Start the reset coroutine if it's not already running
             StartCoroutine(ResetRotationSmoothly());
         }
     }
 
-    // Coroutine to smoothly reset rotation back to zero
+    private void UpdateDistanceUI()
+    {
+        distanceTraveled = transform.position.z - startPosition.z;
+        if (distanceText != null)
+        {
+            distanceText.text = $"Distance: {Mathf.FloorToInt(distanceTraveled)}m";
+        }
+    }
+
     private IEnumerator ResetRotationSmoothly()
     {
-        while (Quaternion.Angle(transform.rotation, Quaternion.identity) > 0.1f)
+        isResettingRotation = true;
+        while (Mathf.Abs(transform.rotation.eulerAngles.y) > 0.1f)
         {
-            transform.rotation = Quaternion.Lerp(transform.rotation, Quaternion.identity, Time.deltaTime * 5f);
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, 0, 0), Time.deltaTime * 5f);
             yield return null;
         }
-
-        transform.rotation = Quaternion.identity; // Ensure it's fully reset
+        transform.rotation = Quaternion.Euler(0, 0, 0);
+        isResettingRotation = false;
     }
 
     private void OnAnimalRidden(float yPos, Animal animal)
     {
-        if(GameManager.IsPlayerRiding)
-        {
-            return;
-        }
-        Debug.Log("animal yPos: " + yPos);
-        riddenYPos = (yPos * 2f) + transform.position.y;
+        if (GameManager.IsPlayerRiding) return;
+
+        riddenYPos = (yPos * 2f) + playerVerticalPosition;
         transform.position = new Vector3(transform.position.x, riddenYPos, transform.position.z);
         isRiding = true;
         GameManager.IsPlayerRiding = true;
         riddenAnimal = animal;
-        // Disable player controls when riding an animal
-        //enabled = false;
+        PlayerLandedOnAnimal();
     }
 
-     // Detect ground collision
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.CompareTag("Terrain"))
         {
-            isJumping = false;  // Allow jumping again when landed
-            jumpLandingIndicator.EndJump();
+            PlayerLandedOnAnimal();
         }
+    }
+
+    public void PlayerLandedOnAnimal()
+    {
+        isJumping = false;
+        canJump = true;
+        jumpLandingIndicator.EndJump();
     }
 }

@@ -13,7 +13,7 @@ public class TouchInputHandler : MonoBehaviour
         {
             isHolding = true;
             touchStartPos = Input.mousePosition; // Save the starting position
-            Debug.Log("Touch Started at: " + touchStartPos);
+            //Debug.Log("Touch Started at: " + touchStartPos);
         }
 
         // Primary Down Stay: Detect dragging
@@ -26,11 +26,11 @@ public class TouchInputHandler : MonoBehaviour
             {
                 if (dragDistance > 0)
                 {
-                    Debug.Log("Dragging Right");
+                    //Debug.Log("Dragging Right");
                 }
                 else
                 {
-                    Debug.Log("Dragging Left");
+                   // Debug.Log("Dragging Left");
                 }
 
                 // Reset the start position to prevent continuous reporting
@@ -42,7 +42,7 @@ public class TouchInputHandler : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             isHolding = false;
-            Debug.Log("Touch Ended at: " + Input.mousePosition);
+           // Debug.Log("Touch Ended at: " + Input.mousePosition);
         }
     }
 }

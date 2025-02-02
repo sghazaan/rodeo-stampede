@@ -17,7 +17,7 @@ public class Animal : MonoBehaviour
 
     protected virtual void Update()
     {
-        if(GameManager.IsGameLost)
+        if(GameManager.IsGameOver)
         {
             return;
         }
@@ -28,10 +28,8 @@ public class Animal : MonoBehaviour
         }
         else
         {
-            // Move forward and slightly sway left or right
-            Vector3 forward = transform.forward;
-            forward.x += Random.Range(-0.02f, 0.02f); // Slight sway
-            transform.Translate(forward.normalized * speed * Time.deltaTime, Space.World);
+            transform.Translate(transform.forward * speed * Time.deltaTime, Space.World);
+
         }
 
         // Check if the animal falls behind the player
@@ -45,9 +43,10 @@ public class Animal : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
+            Debug.Log("Player collided with animal");
             if(!isRidden && GameManager.IsPlayerRiding)
             {
-                GameManager.IsGameLost = true;
+                GameHandler.Instance.GameOver();
                 Debug.Log("Game Over! Animal - Player");
                 return;
             }
@@ -57,11 +56,12 @@ public class Animal : MonoBehaviour
         //compare layer to amimal layer
         else if(other.gameObject.layer == LayerMask.NameToLayer("Animal"))
         {
+            Debug.Log("Animal collided with animal");
             if(GameManager.IsPlayerRiding)
             {
                 if(other.gameObject.GetComponent<Animal>().isRidden)
                 {
-                    GameManager.IsGameLost = true;
+                    GameHandler.Instance.GameOver();
                     Debug.Log("Game Over! Animal - Animal");
                 }
             }
