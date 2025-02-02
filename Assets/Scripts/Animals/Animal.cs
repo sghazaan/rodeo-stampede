@@ -2,17 +2,20 @@ using UnityEngine;
 
 public class Animal : MonoBehaviour
 {
-    public float speed; // Speed of the animal
-    public bool isRidden = false; // Whether the player is riding this animal
-    protected Transform player; // Reference to the player transform
-    public float respawnThreshold = 30f; // Distance behind the player to deactivate
-    bool isRidingDone = false; // Whether the player has finished riding
+    public float speed;
+    public bool isRidden = false;
+    protected Transform player;
+    public float respawnThreshold = 30f;
+    private Vector3 lastPosition;
+    private float smoothTime = 0.1f;
+    private Vector3 currentVelocity;
 
     public virtual void Initialize(Transform playerTransform, float animalSpeed)
     {
         player = playerTransform;
         speed = animalSpeed;
         isRidden = false;
+        lastPosition = transform.position;
     }
 
     protected virtual void Update()
@@ -21,59 +24,61 @@ public class Animal : MonoBehaviour
         {
             return;
         }
+
         if (isRidden)
         {
-            // Follow the player position
-            transform.position = new Vector3(player.position.x, transform.position.y, player.position.z);
+            // Smoothly follow player's XZ position while maintaining Y
+            Vector3 targetPosition = new Vector3(
+                player.position.x, 
+                transform.position.y, 
+                player.position.z
+            );
+            
+            // Use SmoothDamp for smoother following
+            transform.position = Vector3.SmoothDamp(
+                transform.position, 
+                targetPosition, 
+                ref currentVelocity, 
+                smoothTime
+            );
         }
         else
         {
-            transform.Translate(transform.forward * speed * Time.deltaTime, Space.World);
-
+            transform.Translate(Vector3.forward * speed * Time.deltaTime, Space.World);
         }
 
-        // Check if the animal falls behind the player
         if (player.position.z - transform.position.z > respawnThreshold)
         {
             DeactivateAndRespawn();
         }
+        
+        lastPosition = transform.position;
     }
 
     protected virtual void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("Player collided with animal");
             if(!isRidden && GameManager.IsPlayerRiding)
             {
                 GameHandler.Instance.GameOver();
-                Debug.Log("Game Over! Animal - Player");
                 return;
             }
             isRidden = true;
             EventHub.InvokeAnimalRidden(transform.position.y, this);
         }
-        //compare layer to amimal layer
         else if(other.gameObject.layer == LayerMask.NameToLayer("Animal"))
         {
-            Debug.Log("Animal collided with animal");
-            if(GameManager.IsPlayerRiding)
+            if(GameManager.IsPlayerRiding && other.gameObject.GetComponent<Animal>().isRidden)
             {
-                if(other.gameObject.GetComponent<Animal>().isRidden)
-                {
-                    GameHandler.Instance.GameOver();
-                    Debug.Log("Game Over! Animal - Animal");
-                }
+                GameHandler.Instance.GameOver();
             }
         }
     }
 
     private void DeactivateAndRespawn()
     {
-        // Deactivate this animal
         gameObject.SetActive(false);
-
-        // Respawn a new animal through the ObjectPool
         AnimalSpawner.Instance.SpawnAnimal();
     }
 }

@@ -1328,6 +1328,18 @@ MonoBehaviour:
   landingIndicator: {fileID: 237207701}
   startButton: {fileID: 839520552}
   restartButton: {fileID: 1273551914}
+--- !u!65 &1482539262 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 793453270394160051, guid: e7b8ad65f6b55e247a19028c097050de,
+    type: 3}
+  m_PrefabInstance: {fileID: 5522893237307096339}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &1570323847 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 4570077947371408845, guid: e7b8ad65f6b55e247a19028c097050de,
+    type: 3}
+  m_PrefabInstance: {fileID: 5522893237307096339}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1589452670
 GameObject:
   m_ObjectHideFlags: 0
@@ -1873,6 +1885,16 @@ PrefabInstance:
       propertyPath: rotationAngle
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
+        type: 3}
+      propertyPath: physicsCollider
+      value: 
+      objectReference: {fileID: 1482539262}
+    - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
+        type: 3}
+      propertyPath: triggerCollider
+      value: 
+      objectReference: {fileID: 1570323847}
     - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
       propertyPath: jumpLandingIndicator

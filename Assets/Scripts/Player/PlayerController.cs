@@ -1,6 +1,6 @@
-using System.Collections;
-using TMPro;
 using UnityEngine;
+using TMPro;
+using System.Collections;
 
 public class PlayerController : MonoBehaviour
 {
@@ -13,6 +13,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private JumpLandingIndicator jumpLandingIndicator;
     [SerializeField] private TextMeshProUGUI distanceText;
     public Rigidbody playerRigidbody;
+    
+    [Header("Colliders")]
+    [SerializeField] private Collider triggerCollider; // Assign the trigger collider
+    [SerializeField] private Collider physicsCollider; // Assign the non-trigger collider
 
     [Header("Position Settings")]
     [SerializeField] private float playerVerticalPosition = 1f;
@@ -24,6 +28,7 @@ public class PlayerController : MonoBehaviour
     private bool isRiding;
     private float riddenYPos;
     private Animal riddenAnimal;
+    private Vector3 moveVelocity;
 
     [Header("Touch Controls")]
     private bool isHolding;
@@ -45,9 +50,13 @@ public class PlayerController : MonoBehaviour
         startPosition = transform.position;
         if (playerRigidbody != null)
         {
+            playerRigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+            playerRigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
             playerRigidbody.freezeRotation = true;
-            playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionX;
+            playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation | 
+                                        RigidbodyConstraints.FreezePositionX;
         }
+        moveVelocity = Vector3.forward * moveSpeed;
     }
 
     private void Update()
@@ -64,6 +73,27 @@ public class PlayerController : MonoBehaviour
         MovePlayer();
     }
 
+    private void MovePlayer()
+    {
+        if (isRiding && !isJumping)
+        {
+            // When riding, use position-based movement
+            Vector3 newPosition = transform.position + (moveVelocity * Time.fixedDeltaTime);
+            newPosition.y = riddenYPos;
+            transform.position = newPosition;
+            
+            // Set rigidbody velocity to zero to prevent physics interference
+            playerRigidbody.velocity = Vector3.zero;
+        }
+        else
+        {
+            // During normal movement or jumping, use rigidbody
+            Vector3 currentVel = playerRigidbody.velocity;
+            currentVel.z = moveSpeed;
+            playerRigidbody.velocity = currentVel;
+        }
+    }
+
     private void HandleInput()
     {
         HandleTouchStart();
@@ -75,20 +105,6 @@ public class PlayerController : MonoBehaviour
         {
             HandleJump();
         }
-    }
-
-    private void MovePlayer()
-    {
-        Vector3 forwardMovement = Vector3.forward * moveSpeed * Time.fixedDeltaTime;
-        
-        if (isRiding && !isJumping)
-        {
-            // When riding, maintain Y position
-            transform.position = new Vector3(transform.position.x, riddenYPos, transform.position.z);
-        }
-        
-        // Always move forward using Translate
-        transform.Translate(forwardMovement, Space.World);
     }
 
     private void HandleTouchStart()
@@ -112,13 +128,10 @@ public class PlayerController : MonoBehaviour
         isJumping = true;
         jumpLandingIndicator.StartJump();
 
-        // Only modify the Y component of velocity for the jump
-        Vector3 currentVel = playerRigidbody.velocity;
-        currentVel.y = 0f; // Reset only vertical velocity
-        playerRigidbody.velocity = currentVel;
-        
-        // Add upward force for jump
-        playerRigidbody.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        // Maintain forward velocity while adding upward force
+        Vector3 jumpVelocity = playerRigidbody.velocity;
+        jumpVelocity.y = jumpForce;
+        playerRigidbody.velocity = jumpVelocity;
 
         HandleDismount();
         canJump = false;
@@ -182,6 +195,10 @@ public class PlayerController : MonoBehaviour
         isRiding = true;
         GameManager.IsPlayerRiding = true;
         riddenAnimal = animal;
+        
+        // Disable physics collider when riding
+        if (physicsCollider != null) physicsCollider.enabled = false;
+        
         PlayerLandedOnAnimal();
     }
 
@@ -190,6 +207,8 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Terrain"))
         {
             PlayerLandedOnAnimal();
+            // Re-enable physics collider
+            if (physicsCollider != null) physicsCollider.enabled = true;
         }
     }
 
