@@ -1328,6 +1328,18 @@ MonoBehaviour:
   landingIndicator: {fileID: 237207701}
   startButton: {fileID: 839520552}
   restartButton: {fileID: 1273551914}
+--- !u!114 &1580422427 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
+    type: 3}
+  m_PrefabInstance: {fileID: 5522893237307096339}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d54d94662532697409489398a6661ba3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1589452670
 GameObject:
   m_ObjectHideFlags: 0
@@ -1855,6 +1867,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
+      propertyPath: jumpForce
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
+        type: 3}
       propertyPath: distanceText
       value: 
       objectReference: {fileID: 551029911}
@@ -1946,6 +1963,11 @@ PrefabInstance:
       propertyPath: player
       value: 
       objectReference: {fileID: 520766404}
+    - target: {fileID: 183996958519709433, guid: 376dcffc269c56a4e9e4c4aca8de9d3f,
+        type: 3}
+      propertyPath: playerController
+      value: 
+      objectReference: {fileID: 1580422427}
     - target: {fileID: 1445527609482511923, guid: 376dcffc269c56a4e9e4c4aca8de9d3f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1959,7 +1981,7 @@ PrefabInstance:
     - target: {fileID: 1445527609482511923, guid: 376dcffc269c56a4e9e4c4aca8de9d3f,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: -6.63
       objectReference: {fileID: 0}
     - target: {fileID: 1445527609482511923, guid: 376dcffc269c56a4e9e4c4aca8de9d3f,
         type: 3}
