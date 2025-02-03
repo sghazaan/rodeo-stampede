@@ -7,6 +7,7 @@ public class JumpLandingIndicator : MonoBehaviour
     [Header("References")]
     [SerializeField] private Transform player;
     [SerializeField] private PlayerController playerController;
+    [SerializeField] private Material indicatorMaterial;
 
     [Header("Landing Settings")]
     [SerializeField] private float initialJumpOffset = 3f;
@@ -29,7 +30,7 @@ public class JumpLandingIndicator : MonoBehaviour
     private bool landingOnAnimal = false;
 
     private HashSet<Renderer> highlightedAnimals = new HashSet<Renderer>();
-    private Dictionary<Renderer, Color> originalColors = new Dictionary<Renderer, Color>();
+    private Dictionary<Renderer, List<Material>> originalMaterials = new Dictionary<Renderer, List<Material>>();
     private HashSet<Renderer> currentAnimals = new HashSet<Renderer>();
 
     void Start()
@@ -59,6 +60,7 @@ public class JumpLandingIndicator : MonoBehaviour
             transform.position = new Vector3(targetPosition.x, 0f, targetPosition.z);
 
             CheckForLanding();
+            UpdateAnimalMaterials(); // Update animal materials based on overlap
         }
     }
 
@@ -88,16 +90,37 @@ public class JumpLandingIndicator : MonoBehaviour
         {
             if (col.gameObject.layer == LayerMask.NameToLayer("Animal"))
             {
-                Renderer animalRenderer = col.GetComponent<Renderer>();
+                Renderer animalRenderer = col.transform.GetChild(0).GetComponent<Renderer>();
                 if (animalRenderer != null)
                 {
                     currentAnimals.Add(animalRenderer);
 
                     if (!highlightedAnimals.Contains(animalRenderer))
                     {
-                        originalColors[animalRenderer] = animalRenderer.material.color;
-                        animalRenderer.material.color = Color.yellow;
-                        highlightedAnimals.Add(animalRenderer);
+                        if(animalRenderer.materials.Length > 1)
+                        {
+                            List<Material> materials = new List<Material>();
+                            foreach(Material mat in animalRenderer.materials)
+                            {
+                                materials.Add(mat);
+                            }
+                            originalMaterials[animalRenderer] = materials;
+                            Material[] newMaterials = new Material[materials.Count];
+                            for(int i = 0; i < materials.Count; i++)
+                            {
+                                newMaterials[i] = indicatorMaterial;
+                            }
+                            animalRenderer.materials = newMaterials;
+                            highlightedAnimals.Add(animalRenderer);
+                        }
+                        else
+                        {
+                            List<Material> materials = new List<Material>();
+                            materials.Add(animalRenderer.material);
+                            originalMaterials[animalRenderer] = materials;
+                            animalRenderer.material = indicatorMaterial;
+                            highlightedAnimals.Add(animalRenderer);
+                        }
                     }
 
                     if (Input.GetMouseButtonDown(0))
@@ -110,8 +133,14 @@ public class JumpLandingIndicator : MonoBehaviour
             }
         }
 
-        RestoreAnimalColors(currentAnimals);
+        RestoreAnimalMaterials(currentAnimals);
         return foundClickableAnimal;
+    }
+
+    private void UpdateAnimalMaterials()
+    {
+        // Restore materials for animals that are no longer overlapping
+        RestoreAnimalMaterials(currentAnimals);
     }
 
     private void StartLandingOnGround(Vector3 landingPoint)
@@ -163,7 +192,7 @@ public class JumpLandingIndicator : MonoBehaviour
         circleRenderer.enabled = false;
         
         player.position = landingTargetPos;
-        RestoreAnimalColors(new HashSet<Renderer>());
+        RestoreAnimalMaterials(new HashSet<Renderer>());
 
         if (playerController != null)
         {
@@ -198,11 +227,11 @@ public class JumpLandingIndicator : MonoBehaviour
         {
             isJumping = false;
             circleRenderer.enabled = false;
-            RestoreAnimalColors(new HashSet<Renderer>());
+            RestoreAnimalMaterials(new HashSet<Renderer>());
         }
     }
 
-    private void RestoreAnimalColors(HashSet<Renderer> currentAnimals)
+    private void RestoreAnimalMaterials(HashSet<Renderer> currentAnimals)
     {
         List<Renderer> toRemove = new List<Renderer>();
 
@@ -210,9 +239,21 @@ public class JumpLandingIndicator : MonoBehaviour
         {
             if (!currentAnimals.Contains(animalRenderer))
             {
-                if (originalColors.ContainsKey(animalRenderer))
+                if (originalMaterials.ContainsKey(animalRenderer))
                 {
-                    animalRenderer.material.color = originalColors[animalRenderer];
+                    if(animalRenderer.materials.Length > 1)
+                    {
+                        Material[] newMaterials = new Material[originalMaterials[animalRenderer].Count];
+                        for(int i = 0; i < originalMaterials[animalRenderer].Count; i++)
+                        {
+                            newMaterials[i] = originalMaterials[animalRenderer][i];
+                        }
+                        animalRenderer.materials = newMaterials;
+                    }
+                    else
+                    {
+                        animalRenderer.material = originalMaterials[animalRenderer][0];
+                    }
                     toRemove.Add(animalRenderer);
                 }
             }
@@ -221,7 +262,7 @@ public class JumpLandingIndicator : MonoBehaviour
         foreach (Renderer animalRenderer in toRemove)
         {
             highlightedAnimals.Remove(animalRenderer);
-            originalColors.Remove(animalRenderer);
+            originalMaterials.Remove(animalRenderer);
         }
     }
 }

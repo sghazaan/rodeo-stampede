@@ -930,9 +930,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 520766404}
-  spawnDistance: 40
+  spawnDistance: 20
   randomXRange: 4
-  initialSpawnCount: 10
+  initialSpawnCount: 5
 --- !u!114 &870708436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -947,15 +947,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pools:
   - tag: Horse
-    prefab: {fileID: 7686472876434514311, guid: 48bd068fb47c4bd42b9971672bb6f233,
+    prefab: {fileID: 5622270142922969401, guid: dfdc15fdeb0dc7f49962b4941c8ada2a,
       type: 3}
-    size: 3
+    size: 4
   - tag: Bull
-    prefab: {fileID: 7686472876434514311, guid: 4c53a9f5ba97d244c9ef2011c1846931,
+    prefab: {fileID: 4684695609445050588, guid: 06e7315fbbbe57b47878e15b49b631bc,
       type: 3}
     size: 5
   - tag: Elephant
-    prefab: {fileID: 7686472876434514311, guid: 5b768cb1d1c4e12488dc158e9b77f3af,
+    prefab: {fileID: 4740562746494681985, guid: 049fdbc1bd8db6440983e8bfc4bcf07e,
       type: 3}
     size: 2
 --- !u!1 &963194225
@@ -1868,7 +1868,7 @@ PrefabInstance:
     - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
       propertyPath: jumpForce
-      value: 8
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
@@ -1968,6 +1968,11 @@ PrefabInstance:
       propertyPath: playerController
       value: 
       objectReference: {fileID: 1580422427}
+    - target: {fileID: 183996958519709433, guid: 376dcffc269c56a4e9e4c4aca8de9d3f,
+        type: 3}
+      propertyPath: indicatorMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: d2c3cd63b97c47a45a92348a61a8afea, type: 2}
     - target: {fileID: 1445527609482511923, guid: 376dcffc269c56a4e9e4c4aca8de9d3f,
         type: 3}
       propertyPath: m_LocalPosition.x

@@ -3,6 +3,7 @@ using UnityEngine;
 public class Animal : MonoBehaviour
 {
     public float speed;
+    public float ridingYOffset;
     public bool isRidden = false;
     protected Transform player;
     public float respawnThreshold = 30f;
@@ -25,6 +26,7 @@ public class Animal : MonoBehaviour
         {
             // Follow the player position
             transform.position = new Vector3(player.position.x, transform.position.y, player.position.z);
+            transform.rotation = Quaternion.Slerp(transform.rotation, player.rotation, Time.deltaTime * 5f);
         }
         else
         {
@@ -48,7 +50,7 @@ public class Animal : MonoBehaviour
                 return;
             }
             isRidden = true;
-            EventHub.InvokeAnimalRidden(transform.position.y, this);
+            EventHub.InvokeAnimalRidden(ridingYOffset, this);
         }
         else if(other.gameObject.layer == LayerMask.NameToLayer("Animal"))
         {

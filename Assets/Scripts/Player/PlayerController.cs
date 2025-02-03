@@ -172,7 +172,7 @@ public class PlayerController : MonoBehaviour
     {
         if (GameManager.IsPlayerRiding) return;
 
-        riddenYPos = (yPos * 2f) + playerVerticalPosition;
+        riddenYPos = yPos + playerVerticalPosition;
         transform.position = new Vector3(transform.position.x, riddenYPos, transform.position.z);
         isRiding = true;
         GameManager.IsPlayerRiding = true;
