@@ -121,13 +121,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d54d94662532697409489398a6661ba3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
-  rotationAngle: 15
-  jumpForce: 10
+  moveSpeed: 13
+  dragSensitivity: 20
+  maxRotationAngle: 45
+  rotationResetDelay: 1.5
+  jumpForce: 11
   jumpLandingIndicator: {fileID: 0}
   distanceText: {fileID: 0}
+  finalDistanceText: {fileID: 0}
   playerRigidbody: {fileID: 4275886343663937436}
-  playerAnimationController: {fileID: 0}
+  playerAnimationController: {fileID: 4989796525103561475}
   triggerCollider: {fileID: 8256409690366743694}
   physicsCollider: {fileID: 6169305076639720851}
   playerVerticalPosition: 0.5

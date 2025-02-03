@@ -14,6 +14,7 @@ public class PlayerController : MonoBehaviour
     [Header("References")]
     [SerializeField] private JumpLandingIndicator jumpLandingIndicator;
     [SerializeField] private TextMeshProUGUI distanceText;
+    [SerializeField] private TextMeshProUGUI finalDistanceText;
     public Rigidbody playerRigidbody;
     [SerializeField] private PlayerAnimationController playerAnimationController;
     
@@ -174,6 +175,7 @@ public class PlayerController : MonoBehaviour
         if (distanceText != null)
         {
             distanceText.text = $"{Mathf.FloorToInt(distanceTraveled)}m";
+            finalDistanceText.text = "Total Distnce: " + $"{Mathf.FloorToInt(distanceTraveled)}m";
         }
     }
 
