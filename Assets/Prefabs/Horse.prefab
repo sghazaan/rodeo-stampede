@@ -62,7 +62,7 @@ MonoBehaviour:
   speed: 5
   ridingYOffset: 1.65
   isRidden: 0
-  respawnThreshold: 30
+  respawnThreshold: 35
 --- !u!65 &1222297989154444247
 BoxCollider:
   m_ObjectHideFlags: 0

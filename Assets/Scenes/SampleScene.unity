@@ -1010,9 +1010,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 520766404}
-  spawnDistance: 20
-  minSpawnInterval: 10
-  maxSpawnInterval: 20
+  spawnDistance: 10
+  minSpawnInterval: 7
+  maxSpawnInterval: 17
   initialSpawnCount: 10
 --- !u!114 &870708436
 MonoBehaviour:

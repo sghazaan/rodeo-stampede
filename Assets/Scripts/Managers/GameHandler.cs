@@ -46,6 +46,8 @@ public class GameHandler : MonoBehaviour
 
     public void GameOver()
     {
+        if(GameManager.IsGameOver)
+            return;
         player.GetComponent<PlayerController>().GameOverAnimation();
         GameManager.CurrentState = GameManager.GameState.GameOver;
         GameManager.IsPlayerRiding = false;

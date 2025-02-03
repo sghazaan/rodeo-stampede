@@ -41,11 +41,14 @@ public class PlayerController : MonoBehaviour
     private Vector2 touchStartPos;
     private Vector2 touchCurrentPos;
 
+    private float originalMoveSpeed;
+
     private void OnEnable() => EventHub.OnAnimalRidden += OnAnimalRidden;
     private void OnDisable() => EventHub.OnAnimalRidden -= OnAnimalRidden;
 
     private void Start()
     {
+        originalMoveSpeed = moveSpeed;
         InitializePlayer();
     }
 
@@ -68,6 +71,14 @@ public class PlayerController : MonoBehaviour
         if (isRiding && !isJumping)
         {
             transform.position = new Vector3(transform.position.x, riddenYPos, transform.position.z);
+        }
+        if(isJumping)
+        {
+            moveSpeed = originalMoveSpeed * 1.5f;
+        }
+        else
+        {
+            moveSpeed = originalMoveSpeed;
         }
     }
 
@@ -146,11 +157,11 @@ public class PlayerController : MonoBehaviour
 
             touchStartPos = touchCurrentPos;
             // Stop any running reset coroutine to prevent interference
-            StopCoroutine(nameof(ResetRotationSmoothly));
+            //StopCoroutine(nameof(ResetRotationSmoothly));
         }
         else if (!isResettingRotation)
         {
-            StartCoroutine(ResetRotationSmoothly());
+            //StartCoroutine(ResetRotationSmoothly());
         }
     }
 

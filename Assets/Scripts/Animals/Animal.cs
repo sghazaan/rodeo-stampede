@@ -35,7 +35,7 @@ public class Animal : MonoBehaviour
             transform.Translate(Vector3.forward * speed * Time.deltaTime, Space.World);
         }
 
-        if (player.position.z - transform.position.z > respawnThreshold)
+        if ( !isRidden && player.position.z - transform.position.z > respawnThreshold)
         {
             DeactivateAndRespawn();
         }

@@ -35,20 +35,60 @@ public class AnimalSpawner : MonoBehaviour
         }
     }
 
+    // public void SpawnAnimal()
+    // {
+    //     // Randomly choose an animal type
+    //     string[] animalTags = { "Bull", "Horse", "Elephant" };
+    //     string selectedTag = animalTags[Random.Range(0, animalTags.Length)];
+
+    //     // Find a suitable spawn position
+    //     Vector3 spawnPosition = GetUniqueSpawnPosition();
+
+    //     GameObject animalObject = ObjectPool.Instance.SpawnFromPool(selectedTag, spawnPosition, Quaternion.identity);
+
+    //     if (animalObject.TryGetComponent(out Animal animal))
+    //     {
+    //         animal.Initialize(player, animal.speed);
+    //     }
+    // }
+
+
     public void SpawnAnimal()
     {
         // Randomly choose an animal type
         string[] animalTags = { "Bull", "Horse", "Elephant" };
-        string selectedTag = animalTags[Random.Range(0, animalTags.Length)];
+        string selectedTag;
+        GameObject animalObject;
+        Animal animal;
 
-        // Find a suitable spawn position
-        Vector3 spawnPosition = GetUniqueSpawnPosition();
+        int maxAttempts = 10; // Prevent infinite loop
+        int attempts = 0;
 
-        GameObject animalObject = ObjectPool.Instance.SpawnFromPool(selectedTag, spawnPosition, Quaternion.identity);
-
-        if (animalObject.TryGetComponent(out Animal animal))
+        do
         {
-            animal.Initialize(player, animal.speed);
+            selectedTag = animalTags[Random.Range(0, animalTags.Length)];
+            animalObject = ObjectPool.Instance.SpawnFromPool(selectedTag, GetUniqueSpawnPosition(), Quaternion.identity);
+            
+            if (animalObject.TryGetComponent(out animal))
+            {
+                // If animal is not currently being ridden, initialize and break
+                if (!animal.isRidden)
+                {
+                    animal.Initialize(player, animal.speed);
+                    break;
+                }
+            }
+
+            // If animal is ridden, deactivate and try again
+            animalObject.SetActive(false);
+            attempts++;
+        }
+        while (attempts < maxAttempts);
+
+        // Fallback if no non-ridden animal found
+        if (attempts >= maxAttempts)
+        {
+            Debug.LogWarning("Could not find a non-ridden animal to spawn");
         }
     }
 
