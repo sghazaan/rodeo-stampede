@@ -120,7 +120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d54d94662532697409489398a6661ba3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 13
+  moveSpeed: 20
   dragSensitivity: 20
   maxRotationAngle: 45
   rotationResetDelay: 1.5
@@ -147,9 +147,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animator: {fileID: 3323358901914750897}
   audioSource: {fileID: 0}
-  jumpSound: {fileID: 0}
-  rideSound: {fileID: 0}
-  gameOverSound: {fileID: 0}
+  jumpSound: {fileID: 8300000, guid: f1be043bf4d298244b93dfa57f360dee, type: 3}
+  rideSound: {fileID: 8300000, guid: 11bb7bd4aab3b8b49916954d534c54d8, type: 3}
+  gameOverSound: {fileID: 8300000, guid: 56d8dd7f478308d48830459d0efb5dec, type: 3}
 --- !u!54 &4275886343663937436
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -15,14 +15,20 @@ public class PlayerAnimationController : MonoBehaviour
     {
         _animator.SetBool(IsJumping, isJumping);
         if (isJumping && jumpSound != null)
+        {
+            audioSource.Stop();
             audioSource.PlayOneShot(jumpSound);
+        }
     }
 
     public void SetIsRiding(bool isRiding)
     {
         _animator.SetBool(IsRiding, isRiding);
         if (isRiding && rideSound != null)
+        {
+            audioSource.Stop();
             audioSource.PlayOneShot(rideSound);
+        }
     }
 
     public void SetIsRunning(bool isRunning)
@@ -34,6 +40,9 @@ public class PlayerAnimationController : MonoBehaviour
     {
         _animator.SetBool(IsDead, isDead);
         if(isDead && gameOverSound != null)
+        {
+            audioSource.Stop();
             audioSource.PlayOneShot(gameOverSound);
+        }
     }
 }

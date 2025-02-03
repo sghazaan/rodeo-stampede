@@ -52,15 +52,6 @@ public class PlayerController : MonoBehaviour
     private void InitializePlayer()
     {
         startPosition = transform.position;
-        // if (playerRigidbody != null)
-        // {
-        //     playerRigidbody.interpolation = RigidbodyInterpolation.Interpolate;
-        //     playerRigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
-        //     playerRigidbody.freezeRotation = true;
-        //     playerRigidbody.constraints = RigidbodyConstraints.FreezeRotation | 
-        //                                 RigidbodyConstraints.FreezePositionX;
-        // }
-        //moveVelocity = Vector3.forward * moveSpeed;
     }
 
     private void Update()
@@ -141,11 +132,18 @@ public class PlayerController : MonoBehaviour
         
         if (Mathf.Abs(dragDistance) > dragSensitivity)
         {
-            float rotationAmount = Mathf.Clamp(dragDistance, -maxRotationAngle, maxRotationAngle);
+
+            float rotationAmount = Mathf.Clamp(dragDistance/3f, -maxRotationAngle, maxRotationAngle);
             // transform.rotation = Quaternion.Euler(0, rotationAmount, 0); // Rotate on Y-axis
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, rotationAmount, 0), 
-                Time.deltaTime * 5f); // Smoother interpolation
+            transform.rotation = Quaternion.Euler(0, rotationAmount, 0);
             Debug.Log("Rotating: " + rotationAmount);
+
+
+            // float rotationAmount = Mathf.Clamp(dragDistance / 3f, -maxRotationAngle, maxRotationAngle);
+            // Quaternion targetRotation = Quaternion.Euler(0, rotationAmount, 0);
+            // // Smooth interpolation between current and target rotation
+            // transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
+
             touchStartPos = touchCurrentPos;
             // Stop any running reset coroutine to prevent interference
             StopCoroutine(nameof(ResetRotationSmoothly));
