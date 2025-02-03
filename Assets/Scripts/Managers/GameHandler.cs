@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -45,10 +46,18 @@ public class GameHandler : MonoBehaviour
 
     public void GameOver()
     {
+        player.GetComponent<PlayerController>().GameOverAnimation();
         GameManager.CurrentState = GameManager.GameState.GameOver;
         GameManager.IsPlayerRiding = false;
+        StartCoroutine(ShowGameOverScreen());
+        // gameOverUI.SetActive(true);
+        //player.gameObject.SetActive(false); // Hide player
+    }
+
+    IEnumerator ShowGameOverScreen()
+    {
+        yield return new WaitForSeconds(3f);
         gameOverUI.SetActive(true);
-        player.gameObject.SetActive(false); // Hide player
     }
 
     public void RestartGame()

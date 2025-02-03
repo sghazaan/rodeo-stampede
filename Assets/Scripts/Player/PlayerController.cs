@@ -13,6 +13,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private JumpLandingIndicator jumpLandingIndicator;
     [SerializeField] private TextMeshProUGUI distanceText;
     public Rigidbody playerRigidbody;
+    [SerializeField] private PlayerAnimationController playerAnimationController;
     
     [Header("Colliders")]
     [SerializeField] private Collider triggerCollider; // Assign the trigger collider
@@ -115,6 +116,9 @@ public class PlayerController : MonoBehaviour
         jumpLandingIndicator.StartJump();
         HandleDismount();
         canJump = false;
+        playerAnimationController.SetIsRunning(false);
+        playerAnimationController.SetIsRiding(false);
+        playerAnimationController.SetIsJumping(true);
     }
 
     private void HandleDismount()
@@ -171,7 +175,10 @@ public class PlayerController : MonoBehaviour
     private void OnAnimalRidden(float yPos, Animal animal)
     {
         if (GameManager.IsPlayerRiding) return;
-
+        playerAnimationController.SetIsJumping(false);
+        playerAnimationController.SetIsRunning(false);
+        playerAnimationController.SetIsRiding(true);
+        
         riddenYPos = yPos + playerVerticalPosition;
         transform.position = new Vector3(transform.position.x, riddenYPos, transform.position.z);
         isRiding = true;
@@ -191,8 +198,6 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.CompareTag("Terrain"))
         {
             ResetJumpVariables();
-            // Re-enable physics collider
-            //if (physicsCollider != null) physicsCollider.enabled = true;
         }
     }
 
@@ -200,6 +205,25 @@ public class PlayerController : MonoBehaviour
     {
         isJumping = false;
         canJump = true;
-        jumpLandingIndicator.EndJump();
+        jumpLandingIndicator.EndJump();  
+        if(!GameManager.IsPlayerRiding && !isJumping)
+        {
+            SetIsRunning(true);
+        }
+    }
+
+    public void SetIsRunning(bool isRunning)
+    {
+        playerAnimationController.SetIsRunning(isRunning);
+        playerAnimationController.SetIsJumping(false);
+        playerAnimationController.SetIsRiding(false);
+    }
+
+    public void GameOverAnimation()
+    {
+        playerAnimationController.SetIsJumping(false);
+        playerAnimationController.SetIsRiding(false);
+        playerAnimationController.SetIsRunning(false);
+        playerAnimationController.SetIsDead(true);
     }
 }

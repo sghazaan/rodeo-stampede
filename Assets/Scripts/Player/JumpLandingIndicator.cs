@@ -196,7 +196,9 @@ public class JumpLandingIndicator : MonoBehaviour
 
         if (playerController != null)
         {
+            //playerController.SetIsRunning(true);
             playerController.ResetJumpVariables();
+            
         }
 
         if (landingOnAnimal && targetAnimal != null)

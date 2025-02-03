@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  ridingYOffset: 2
+  ridingYOffset: 1.4
   isRidden: 0
   respawnThreshold: 30
 --- !u!65 &1222297989154444247
