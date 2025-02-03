@@ -27,17 +27,6 @@ public class AnimalSpawner : MonoBehaviour
         }
     }
 
-    // private void Update()
-    // {
-    //     spawnTimer += Time.deltaTime;
-
-    //     if (spawnTimer >= spawnInterval)
-    //     {
-    //         SpawnAnimal();
-    //         spawnTimer = 0f;
-    //     }
-    // }
-
     public void SpawnAnimal()
     {
         // Randomly choose an animal type

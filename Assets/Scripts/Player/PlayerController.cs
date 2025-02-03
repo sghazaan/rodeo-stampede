@@ -208,6 +208,10 @@ public class PlayerController : MonoBehaviour
         {
             ResetJumpVariables();
         }
+        else if(collision.gameObject.CompareTag("Hurdle"))
+        {
+            GameHandler.Instance.GameOver();
+        }
     }
 
     public void ResetJumpVariables()

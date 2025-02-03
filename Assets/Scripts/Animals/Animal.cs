@@ -61,6 +61,13 @@ public class Animal : MonoBehaviour
                 GameHandler.Instance.GameOver();
             }
         }
+        else if(other.CompareTag("Hurdle"))
+        {
+            if(isRidden)
+            {
+                GameHandler.Instance.GameOver();
+            }
+        }
     }
 
     private void DeactivateAndRespawn()
