@@ -1,25 +1,33 @@
 using UnityEngine;
-using System;
-using System.Collections;
+using System.Collections.Generic;
+
 public class AnimalSpawner : MonoBehaviour
 {
-    public static AnimalSpawner Instance; // Singleton instance
-    public Transform player; // Reference to the player
-    public float spawnDistance; // Distance ahead of the player to spawn animals
-    //public float spawnInterval; // Time between spawns
-    public float randomXRange = 4f; // Range for random X spawn positions
-    public int initialSpawnCount = 10; // Initial number of animals to spawn
-    private float spawnTimer;
+    public static AnimalSpawner Instance;
+
+    public Transform player;
+    public float spawnDistance = 50f; // Base spawn distance
+    public float minSpawnInterval = 10f; // Minimum z-axis spacing between animals
+    public float maxSpawnInterval = 20f; // Maximum z-axis spacing between animals
+
+    // Fixed X-axis positions for spawning
+    private float[] xPositions = { -4f, 4f };
+    
+    // Track spawned animal positions to avoid overlap
+    private List<Vector3> spawnedPositions = new List<Vector3>();
+
+    public int initialSpawnCount = 10;
 
     private void Awake()
     {
         Instance = this;
     }
 
-   
     public void SpawnInitialAnimals()
     {
-        Debug.Log("Spawning intial set of animals");
+        // Clear any previous spawn tracking
+        spawnedPositions.Clear();
+        
         // Spawn initial set of animals
         for (int i = 0; i < initialSpawnCount; i++)
         {
@@ -31,16 +39,67 @@ public class AnimalSpawner : MonoBehaviour
     {
         // Randomly choose an animal type
         string[] animalTags = { "Bull", "Horse", "Elephant" };
-        string selectedTag = animalTags[UnityEngine.Random.Range(0, animalTags.Length)];
+        string selectedTag = animalTags[Random.Range(0, animalTags.Length)];
 
-        // Spawn the animal ahead of the player
-        Vector3 spawnPosition = player.position + Vector3.forward * spawnDistance + Vector3.right * UnityEngine.Random.Range(-randomXRange, randomXRange);
+        // Find a suitable spawn position
+        Vector3 spawnPosition = GetUniqueSpawnPosition();
+
         GameObject animalObject = ObjectPool.Instance.SpawnFromPool(selectedTag, spawnPosition, Quaternion.identity);
 
         if (animalObject.TryGetComponent(out Animal animal))
         {
             animal.Initialize(player, animal.speed);
-            //Debug.Log("Animal spawned at: " + spawnPosition);
         }
+    }
+
+    private Vector3 GetUniqueSpawnPosition()
+    {
+        int attempts = 0;
+        Vector3 basePosition = player.position + Vector3.forward * spawnDistance;
+        
+        while (attempts < 100) // Prevent infinite loop
+        {
+            // Choose random x position from fixed array
+            float xPos = xPositions[Random.Range(0, xPositions.Length)];
+            
+            // Add random z-axis interval
+            float zInterval = Random.Range(minSpawnInterval, maxSpawnInterval);
+            
+            Vector3 potentialPosition = new Vector3(
+                xPos, 
+                basePosition.y, 
+                basePosition.z + zInterval * (attempts + 1)
+            );
+
+            // Check if position is unique
+            if (IsPositionUnique(potentialPosition))
+            {
+                spawnedPositions.Add(potentialPosition);
+                return potentialPosition;
+            }
+
+            attempts++;
+        }
+
+        // Fallback to a default position if unique position can't be found
+        return basePosition + new Vector3(
+            xPositions[Random.Range(0, xPositions.Length)], 
+            0, 
+            spawnDistance
+        );
+    }
+
+    private bool IsPositionUnique(Vector3 position, float minDistance = 3f)
+    {
+        foreach (Vector3 spawnedPos in spawnedPositions)
+        {
+            // Check both x and z positions for overlap
+            if (Mathf.Abs(position.x - spawnedPos.x) < minDistance &&
+                Mathf.Abs(position.z - spawnedPos.z) < minDistance)
+            {
+                return false;
+            }
+        }
+        return true;
     }
 }

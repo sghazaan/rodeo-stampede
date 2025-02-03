@@ -1011,8 +1011,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 520766404}
   spawnDistance: 20
-  randomXRange: 4
-  initialSpawnCount: 5
+  minSpawnInterval: 10
+  maxSpawnInterval: 20
+  initialSpawnCount: 10
 --- !u!114 &870708436
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1553,18 +1554,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d54d94662532697409489398a6661ba3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1580422434 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4989796525103561475, guid: e7b8ad65f6b55e247a19028c097050de,
-    type: 3}
-  m_PrefabInstance: {fileID: 5522893237307096339}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 734b8c67c3c71f4499c516fc8cf44f1e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &1589452670
@@ -2172,24 +2161,9 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
-      propertyPath: jumpForce
-      value: 11
-      objectReference: {fileID: 0}
-    - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
-        type: 3}
-      propertyPath: moveSpeed
-      value: 13
-      objectReference: {fileID: 0}
-    - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
-        type: 3}
       propertyPath: distanceText
       value: 
       objectReference: {fileID: 551029911}
-    - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
-        type: 3}
-      propertyPath: rotationAngle
-      value: 45
-      objectReference: {fileID: 0}
     - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
       propertyPath: finalDistanceText
@@ -2197,19 +2171,9 @@ PrefabInstance:
       objectReference: {fileID: 295739988}
     - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
-      propertyPath: rotationResetDelay
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
-        type: 3}
       propertyPath: jumpLandingIndicator
       value: 
       objectReference: {fileID: 237207701}
-    - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
-        type: 3}
-      propertyPath: playerAnimationController
-      value: 
-      objectReference: {fileID: 1580422434}
     - target: {fileID: 4770629319200029206, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
       propertyPath: m_Name
