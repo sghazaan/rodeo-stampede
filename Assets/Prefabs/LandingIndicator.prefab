@@ -49,6 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   playerController: {fileID: 0}
+  indicatorMaterial: {fileID: 2100000, guid: d2c3cd63b97c47a45a92348a61a8afea, type: 2}
   initialJumpOffset: 3
   minJumpOffset: 0.5
   radius: 0.5
@@ -58,6 +59,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 128
+  yOffset: 0
 --- !u!33 &8703789176102656915
 MeshFilter:
   m_ObjectHideFlags: 0

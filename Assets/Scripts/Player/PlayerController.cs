@@ -156,7 +156,7 @@ public class PlayerController : MonoBehaviour
         distanceTraveled = transform.position.z - startPosition.z;
         if (distanceText != null)
         {
-            distanceText.text = $"Distance: {Mathf.FloorToInt(distanceTraveled)}m";
+            distanceText.text = $"{Mathf.FloorToInt(distanceTraveled)}m";
         }
     }
 

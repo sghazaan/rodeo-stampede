@@ -17,6 +17,7 @@ public class JumpLandingIndicator : MonoBehaviour
     [SerializeField] private float landingHeight = 1f;
     [SerializeField] private float jumpProgressSpeed = 1f;
     [SerializeField] private LayerMask groundLayer; // Add layer mask for ground detection
+    [SerializeField] private float yOffset;
 
     [Header("Visual Settings")]
     private Renderer circleRenderer;
@@ -57,7 +58,7 @@ public class JumpLandingIndicator : MonoBehaviour
             float currentOffset = Mathf.Lerp(initialJumpOffset, minJumpOffset, Mathf.SmoothStep(0f, 1f, progressFactor));
             Vector3 forward = player.forward;
             Vector3 targetPosition = player.position + (forward * currentOffset);
-            transform.position = new Vector3(targetPosition.x, 0f, targetPosition.z);
+            transform.position = new Vector3(targetPosition.x, yOffset, targetPosition.z);
 
             CheckForLanding();
             UpdateAnimalMaterials(); // Update animal materials based on overlap
