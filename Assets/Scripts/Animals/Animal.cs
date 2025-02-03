@@ -13,6 +13,8 @@ public class Animal : MonoBehaviour
         player = playerTransform;
         speed = animalSpeed;
         isRidden = false;
+        //set animals's rotation to identity
+        transform.rotation = Quaternion.identity;
     }
 
     protected virtual void Update()

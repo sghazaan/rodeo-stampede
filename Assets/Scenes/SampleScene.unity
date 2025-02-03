@@ -1880,7 +1880,7 @@ PrefabInstance:
     - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
       propertyPath: jumpForce
-      value: 13
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
@@ -1896,6 +1896,11 @@ PrefabInstance:
         type: 3}
       propertyPath: rotationAngle
       value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
+        type: 3}
+      propertyPath: rotationResetDelay
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
@@ -1983,7 +1988,7 @@ PrefabInstance:
     - target: {fileID: 183996958519709433, guid: 376dcffc269c56a4e9e4c4aca8de9d3f,
         type: 3}
       propertyPath: yOffset
-      value: 0
+      value: 0.05
       objectReference: {fileID: 0}
     - target: {fileID: 183996958519709433, guid: 376dcffc269c56a4e9e4c4aca8de9d3f,
         type: 3}

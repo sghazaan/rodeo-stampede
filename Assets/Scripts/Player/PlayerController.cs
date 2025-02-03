@@ -6,7 +6,9 @@ public class PlayerController : MonoBehaviour
 {
     [Header("Movement Settings")]
     [SerializeField] private float moveSpeed = 10f;
-    [SerializeField] private float rotationAngle = 45f;
+    [SerializeField] private float dragSensitivity = 20f;
+    [SerializeField] private float maxRotationAngle = 45f;
+    [SerializeField] private float rotationResetDelay = 1f;
     [SerializeField] private float jumpForce = 8f;
 
     [Header("References")]
@@ -136,10 +138,12 @@ public class PlayerController : MonoBehaviour
         touchCurrentPos = Input.mousePosition;
         float dragDistance = touchCurrentPos.x - touchStartPos.x;
         
-        if (Mathf.Abs(dragDistance) > 50)
+        if (Mathf.Abs(dragDistance) > dragSensitivity)
         {
-            float rotationAmount = Mathf.Clamp(dragDistance * 0.25f, -rotationAngle, rotationAngle);
-             transform.rotation = Quaternion.Euler(0, rotationAmount, 0); // Rotate on Y-axis
+            float rotationAmount = Mathf.Clamp(dragDistance, -maxRotationAngle, maxRotationAngle);
+            // transform.rotation = Quaternion.Euler(0, rotationAmount, 0); // Rotate on Y-axis
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, rotationAmount, 0), 
+                Time.deltaTime * 5f); // Smoother interpolation
             Debug.Log("Rotating: " + rotationAmount);
             touchStartPos = touchCurrentPos;
             // Stop any running reset coroutine to prevent interference
@@ -151,6 +155,19 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private IEnumerator ResetRotationSmoothly()
+    {
+        isResettingRotation = true;
+        yield return new WaitForSeconds(rotationResetDelay);
+        while (Mathf.Abs(transform.rotation.eulerAngles.y) > 0.1f)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.identity, Time.deltaTime * 5f);
+            yield return null;
+        }
+        transform.rotation = Quaternion.identity;
+        isResettingRotation = false;
+    }
+
     private void UpdateDistanceUI()
     {
         distanceTraveled = transform.position.z - startPosition.z;
@@ -160,17 +177,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private IEnumerator ResetRotationSmoothly()
-    {
-        isResettingRotation = true;
-        while (Mathf.Abs(transform.rotation.eulerAngles.y) > 0.1f)
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(0, 0, 0), Time.deltaTime * 5f);
-            yield return null;
-        }
-        transform.rotation = Quaternion.Euler(0, 0, 0);
-        isResettingRotation = false;
-    }
+    
 
     private void OnAnimalRidden(float yPos, Animal animal)
     {
