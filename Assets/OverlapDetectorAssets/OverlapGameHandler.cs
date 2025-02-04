@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class OverlapGameHandler : MonoBehaviour 
 {
@@ -11,6 +12,7 @@ public class OverlapGameHandler : MonoBehaviour
     [Header("Buttons")]
     [SerializeField] private Button hideInputPanelButton;
     [SerializeField] private Button showInputPanelButton;
+    [SerializeField] private Button switchSceneButton;
 
     [Header("Panels")]
     [SerializeField] private GameObject inputPanel;
@@ -51,6 +53,7 @@ public class OverlapGameHandler : MonoBehaviour
     {
         hideInputPanelButton.onClick.AddListener(HideInputPanel);
         showInputPanelButton.onClick.AddListener(ShowInputPanel);
+        switchSceneButton.onClick.AddListener(SwitchScene);
         // Sphere Position Inputs
         spherePosXInput.onValueChanged.AddListener((value) => UpdateSpherePosition());
         spherePosYInput.onValueChanged.AddListener((value) => UpdateSpherePosition());
@@ -173,6 +176,12 @@ public class OverlapGameHandler : MonoBehaviour
     private void ShowInputPanel()
     {
         inputPanel.SetActive(true);
+    }
+
+    private void SwitchScene()
+    {
+        // Load the main game scene
+        SceneManager.LoadScene("SampleScene");
     }
     #endregion
 }

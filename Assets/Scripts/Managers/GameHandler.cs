@@ -17,6 +17,7 @@ public class GameHandler : MonoBehaviour
     [Header("Buttons")]
     [SerializeField] private Button startButton;
     [SerializeField] private Button restartButton;
+    [SerializeField] private Button overlapSceneTriggerButton;
 
     private void Awake()
     {
@@ -29,6 +30,7 @@ public class GameHandler : MonoBehaviour
     {
         startButton.onClick.AddListener(StartGame);
         restartButton.onClick.AddListener(RestartGame);
+        overlapSceneTriggerButton.onClick.AddListener(SwitchToOverlapScene);
         ShowStartMenu();
     }
 
@@ -67,6 +69,11 @@ public class GameHandler : MonoBehaviour
     public void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Reload scene
+    }
+
+    private void SwitchToOverlapScene()
+    {
+        SceneManager.LoadScene("OverlapDetectorScene");
     }
 
     private void ShowStartMenu()
