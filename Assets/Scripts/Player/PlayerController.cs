@@ -41,14 +41,14 @@ public class PlayerController : MonoBehaviour
     private Vector2 touchStartPos;
     private Vector2 touchCurrentPos;
 
-    //private float originalMoveSpeed;
+    private float originalMoveSpeed;
 
     private void OnEnable() => EventHub.OnAnimalRidden += OnAnimalRidden;
     private void OnDisable() => EventHub.OnAnimalRidden -= OnAnimalRidden;
 
     private void Start()
     {
-       // originalMoveSpeed = moveSpeed;
+        originalMoveSpeed = moveSpeed;
         InitializePlayer();
     }
 
@@ -67,18 +67,12 @@ public class PlayerController : MonoBehaviour
 
     private void MovePlayer()
     {
+        Debug.Log("Moving Player with moveSpeed: " + moveSpeed + " and Time.deltaTime: " + Time.deltaTime);
+        Debug.Log("originalMoveSpeed: " + originalMoveSpeed);
         transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
         if (isRiding && !isJumping)
         {
             transform.position = new Vector3(transform.position.x, riddenYPos, transform.position.z);
-        }
-        if(isJumping)
-        {
-            moveSpeed = 20f * 1.5f;
-        }
-        else
-        {
-            moveSpeed = 20f;
         }
     }
 
