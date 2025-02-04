@@ -9,15 +9,15 @@ public class OverlapDetector : MonoBehaviour
     Vector3 cuboidMin, cuboidMax;
     #endregion
 
-    private void Update()
-    {
-        // Check for overlap when space key is pressed
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            bool isOverlapping = CheckBoxSphereIntersection(sphereObject, cuboidObject);
-            Debug.Log($"Intersection Result: {isOverlapping}");
-        }
-    }
+    // private void Update()
+    // {
+    //     // Check for overlap when space key is pressed
+    //     if (Input.GetKeyDown(KeyCode.Space))
+    //     {
+    //         bool isOverlapping = CheckBoxSphereIntersection(sphereObject, cuboidObject);
+    //         Debug.Log($"Intersection Result: {isOverlapping}");
+    //     }
+    // }
 
     public bool CheckBoxSphereIntersection(GameObject sphere, GameObject cuboid)
     {

@@ -5,32 +5,41 @@ using TMPro;
 public class OverlapGameHandler : MonoBehaviour 
 {
     [Header("Game Objects")]
-    public GameObject sphereObject;
-    public GameObject cubeObject;
+    [SerializeField] private GameObject sphereObject;
+    [SerializeField] private GameObject cubeObject;
+
+    [Header("Buttons")]
+    [SerializeField] private Button hideInputPanelButton;
+    [SerializeField] private Button showInputPanelButton;
+
+    [Header("Panels")]
+    [SerializeField] private GameObject inputPanel;
 
     [Header("Position Input Fields")]
-    public TMP_InputField spherePosXInput;
-    public TMP_InputField spherePosYInput;
-    public TMP_InputField spherePosZInput;
+    [SerializeField] private TMP_InputField spherePosXInput;
+    [SerializeField] private TMP_InputField spherePosYInput;
+    [SerializeField] private TMP_InputField spherePosZInput;
 
-    public TMP_InputField cubePosXInput;
-    public TMP_InputField cubePosYInput;
-    public TMP_InputField cubePosZInput;
+    [SerializeField] private TMP_InputField cubePosXInput;
+    [SerializeField] private TMP_InputField cubePosYInput;
+    [SerializeField] private TMP_InputField cubePosZInput;
 
     [Header("Scale Input Fields")]
-    public TMP_InputField sphereScaleInput;
-    public TMP_InputField cubeScaleInput;
+    [SerializeField] private TMP_InputField sphereScaleInput;
+    [SerializeField] private TMP_InputField cubeScaleInput;
 
     [Header("Visualization")]
-    public Image overlapIndicator;
-    public BoxSphereIntersection intersectionDetector;
+    [SerializeField] private OverlapDetector overlapDetector;
 
     [Header("Colors")]
-    public Color overlapColor = Color.red;
-    public Color noOverlapColor = Color.green;
+    [SerializeField] private Color overlapColor = Color.red;
+    [SerializeField] private Color noOverlapColor = Color.green;
+    [Header("Result Text")]
+    [SerializeField] private TMP_Text resultText;
 
     private void Start()
     {
+        inputPanel.SetActive(false);
         // Initial setup of input field listeners
         SetupInputListeners();
         
@@ -40,6 +49,8 @@ public class OverlapGameHandler : MonoBehaviour
 
     private void SetupInputListeners()
     {
+        hideInputPanelButton.onClick.AddListener(HideInputPanel);
+        showInputPanelButton.onClick.AddListener(ShowInputPanel);
         // Sphere Position Inputs
         spherePosXInput.onValueChanged.AddListener((value) => UpdateSpherePosition());
         spherePosYInput.onValueChanged.AddListener((value) => UpdateSpherePosition());
@@ -110,10 +121,12 @@ public class OverlapGameHandler : MonoBehaviour
     private void UpdateOverlapVisualization()
     {
         // Check for overlap using the intersection detector
-        bool isOverlapping = intersectionDetector.CheckBoxSphereIntersection(sphereObject, cubeObject);
+        bool isOverlapping = overlapDetector.CheckBoxSphereIntersection(sphereObject, cubeObject);
 
         // Update indicator color based on overlap status
-        overlapIndicator.color = isOverlapping ? overlapColor : noOverlapColor;
+        sphereObject.GetComponent<Renderer>().material.color = isOverlapping ? overlapColor : noOverlapColor;
+        cubeObject.GetComponent<Renderer>().material.color = isOverlapping ? overlapColor : noOverlapColor;
+        resultText.text = isOverlapping ? "Overlap Detected" : "No Overlap Detected";
     }
 
     private float ParseFloatInput(TMP_InputField input, float defaultValue)
@@ -150,4 +163,16 @@ public class OverlapGameHandler : MonoBehaviour
         // Update visualization
         UpdateOverlapVisualization();
     }
+
+    #region Button Listeners
+    private void HideInputPanel()
+    {
+        inputPanel.SetActive(false);
+    }
+
+    private void ShowInputPanel()
+    {
+        inputPanel.SetActive(true);
+    }
+    #endregion
 }
