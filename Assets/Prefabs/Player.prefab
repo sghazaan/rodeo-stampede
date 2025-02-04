@@ -120,7 +120,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d54d94662532697409489398a6661ba3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 20
+  moveSpeed: 16
   dragSensitivity: 20
   maxRotationAngle: 45
   rotationResetDelay: 1.5

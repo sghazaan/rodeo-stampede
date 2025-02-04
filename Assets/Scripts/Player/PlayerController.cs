@@ -67,12 +67,22 @@ public class PlayerController : MonoBehaviour
 
     private void MovePlayer()
     {
-        Debug.Log("Moving Player with moveSpeed: " + moveSpeed + " and Time.deltaTime: " + Time.deltaTime);
-        Debug.Log("originalMoveSpeed: " + originalMoveSpeed);
-        transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+        //Debug.Log("Moving Player with moveSpeed: " + moveSpeed + " and Time.deltaTime: " + Time.deltaTime);
+        //Debug.Log("originalMoveSpeed: " + originalMoveSpeed);
+        //var pos = moveSpeed * Time.deltaTime;
+        //Debug.Log("transform.forward * moveSpeed * Time.deltaTime: " + pos);
+        //var newPos = new Vector3(transform.position.x, transform.position.y, transform.position.z + pos);
+        //Debug.Log("newPos: " + newPos);
+        //Debug.Log($"transform.position.z: {transform.position.z}");
+        //transform.position = newPos;
+        //transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
+        Debug.Log("position: " + transform.position);
+
+        playerRigidbody.MovePosition(transform.position + (transform.forward * moveSpeed * Time.deltaTime));
         if (isRiding && !isJumping)
         {
-            transform.position = new Vector3(transform.position.x, riddenYPos, transform.position.z);
+            // transform.position = new Vector3(transform.position.x, riddenYPos, transform.position.z);
+            playerRigidbody.MovePosition(new Vector3(transform.position.x, riddenYPos, transform.position.z));
         }
     }
 
@@ -237,6 +247,8 @@ public class PlayerController : MonoBehaviour
 
     public void GameOverAnimation()
     {
+        isRiding = false;
+        isJumping = false;
         playerAnimationController.SetIsJumping(false);
         playerAnimationController.SetIsRiding(false);
         playerAnimationController.SetIsRunning(false);

@@ -1661,7 +1661,7 @@ MonoBehaviour:
   startUI: {fileID: 2054161170}
   gameOverUI: {fileID: 609497072}
   player: {fileID: 520766404}
-  startPosition: {x: 0, y: 0.5, z: 0}
+  startPosition: {x: 0, y: 0.8, z: 0}
   animalSpawner: {fileID: 870708435}
   landingIndicator: {fileID: 237207701}
   startButton: {fileID: 839520552}
@@ -2517,7 +2517,7 @@ PrefabInstance:
     - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
       propertyPath: moveSpeed
-      value: 16
+      value: 11
       objectReference: {fileID: 0}
     - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
@@ -2534,11 +2534,6 @@ PrefabInstance:
       propertyPath: jumpLandingIndicator
       value: 
       objectReference: {fileID: 237207701}
-    - target: {fileID: 4275886343663937436, guid: e7b8ad65f6b55e247a19028c097050de,
-        type: 3}
-      propertyPath: m_Constraints
-      value: 112
-      objectReference: {fileID: 0}
     - target: {fileID: 4770629319200029206, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
       propertyPath: m_Name
@@ -2549,6 +2544,12 @@ PrefabInstance:
       propertyPath: audioSource
       value: 
       objectReference: {fileID: 1318134195}
+    - target: {fileID: 6169305076639720851, guid: e7b8ad65f6b55e247a19028c097050de,
+        type: 3}
+      propertyPath: m_Material
+      value: 
+      objectReference: {fileID: 13400000, guid: 5e39c441f6aa39547be30bffd6e7cbc0,
+        type: 2}
     - target: {fileID: 7181505072262159763, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2599,7 +2600,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 574564686831215338, guid: e7b8ad65f6b55e247a19028c097050de, type: 3}
+    - {fileID: 2927704103935593105, guid: e7b8ad65f6b55e247a19028c097050de, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

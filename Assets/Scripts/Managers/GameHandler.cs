@@ -36,6 +36,7 @@ public class GameHandler : MonoBehaviour
 
     public void StartGame()
     {
+        Debug.Log("Game Started");
         GameManager.CurrentState = GameManager.GameState.Playing;
         startUI.SetActive(false);
         gameOverUI.SetActive(false);
@@ -50,7 +51,9 @@ public class GameHandler : MonoBehaviour
     {
         if(GameManager.IsGameOver)
             return;
-        player.GetComponent<PlayerController>().GameOverAnimation();
+        Debug.Log("Game Over");
+        PlayerController playerController = player.GetComponent<PlayerController>();
+        playerController.GameOverAnimation();
         GameManager.CurrentState = GameManager.GameState.GameOver;
         GameManager.IsPlayerRiding = false;
         //move player to the right + 1.5f translate
