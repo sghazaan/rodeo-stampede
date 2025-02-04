@@ -2517,13 +2517,23 @@ PrefabInstance:
     - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
       propertyPath: moveSpeed
-      value: 11
+      value: 7.5
       objectReference: {fileID: 0}
     - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
       propertyPath: distanceText
       value: 
       objectReference: {fileID: 551029911}
+    - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
+        type: 3}
+      propertyPath: dragSensitivity
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
+        type: 3}
+      propertyPath: maxRotationAngle
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 3526994259472013165, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
       propertyPath: finalDistanceText
@@ -2544,12 +2554,6 @@ PrefabInstance:
       propertyPath: audioSource
       value: 
       objectReference: {fileID: 1318134195}
-    - target: {fileID: 6169305076639720851, guid: e7b8ad65f6b55e247a19028c097050de,
-        type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 5e39c441f6aa39547be30bffd6e7cbc0,
-        type: 2}
     - target: {fileID: 7181505072262159763, guid: e7b8ad65f6b55e247a19028c097050de,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -2600,9 +2604,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 574564686831215338, guid: e7b8ad65f6b55e247a19028c097050de, type: 3}
-    - {fileID: 2927704103935593105, guid: e7b8ad65f6b55e247a19028c097050de, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

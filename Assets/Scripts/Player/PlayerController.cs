@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour
     private Vector2 touchCurrentPos;
 
     private float originalMoveSpeed;
+    
 
     private void OnEnable() => EventHub.OnAnimalRidden += OnAnimalRidden;
     private void OnDisable() => EventHub.OnAnimalRidden -= OnAnimalRidden;
@@ -67,23 +68,38 @@ public class PlayerController : MonoBehaviour
 
     private void MovePlayer()
     {
-        //Debug.Log("Moving Player with moveSpeed: " + moveSpeed + " and Time.deltaTime: " + Time.deltaTime);
-        //Debug.Log("originalMoveSpeed: " + originalMoveSpeed);
-        //var pos = moveSpeed * Time.deltaTime;
-        //Debug.Log("transform.forward * moveSpeed * Time.deltaTime: " + pos);
-        //var newPos = new Vector3(transform.position.x, transform.position.y, transform.position.z + pos);
-        //Debug.Log("newPos: " + newPos);
-        //Debug.Log($"transform.position.z: {transform.position.z}");
-        //transform.position = newPos;
-        //transform.Translate(Vector3.forward * moveSpeed * Time.deltaTime);
-        Debug.Log("position: " + transform.position);
-
-        playerRigidbody.MovePosition(transform.position + (transform.forward * moveSpeed * Time.deltaTime));
+        Vector3 newPosition = transform.position + (transform.forward * moveSpeed * Time.deltaTime);
+        newPosition.x = Mathf.Clamp(newPosition.x, -4.5f, 4.5f);
         if (isRiding && !isJumping)
         {
-            // transform.position = new Vector3(transform.position.x, riddenYPos, transform.position.z);
-            playerRigidbody.MovePosition(new Vector3(transform.position.x, riddenYPos, transform.position.z));
+            newPosition.y = riddenYPos;
         }
+        playerRigidbody.MovePosition(newPosition);
+    } 
+
+    private void HandleDragging()
+    {
+        touchCurrentPos = Input.mousePosition;
+        float dragDistance = touchCurrentPos.x - touchStartPos.x;
+        
+        if (Mathf.Abs(dragDistance) > dragSensitivity)
+        {
+           // StopCoroutine(ResetRotationSmoothly());
+            float rotationAmount = Mathf.Clamp(dragDistance/4f, -maxRotationAngle, maxRotationAngle);
+            Debug.Log($"Rotation Amount: {rotationAmount}");
+            
+            // Get current rotation and clamp it
+           // float currentYRotation = transform.rotation.eulerAngles.y;
+            //Debug.Log($"Current Rotation: {currentYRotation}");
+            float clampedRotation = Mathf.Clamp( rotationAmount, -maxRotationAngle, maxRotationAngle);
+            Debug.Log($"Clamped Rotation: {clampedRotation}");
+            playerRigidbody.MoveRotation(Quaternion.Euler(0, clampedRotation, 0));
+            touchStartPos = touchCurrentPos;
+        }
+        // else if(!isResettingRotation)
+        // {
+        //     StartCoroutine(ResetRotationSmoothly());
+        // }
     }
 
     private void HandleInput()
@@ -140,45 +156,18 @@ public class PlayerController : MonoBehaviour
         GameManager.IsPlayerRiding = false;
     }
 
-    private void HandleDragging()
-    {
-        touchCurrentPos = Input.mousePosition;
-        float dragDistance = touchCurrentPos.x - touchStartPos.x;
-        
-        if (Mathf.Abs(dragDistance) > dragSensitivity)
-        {
-
-            float rotationAmount = Mathf.Clamp(dragDistance/3f, -maxRotationAngle, maxRotationAngle);
-            // transform.rotation = Quaternion.Euler(0, rotationAmount, 0); // Rotate on Y-axis
-            transform.rotation = Quaternion.Euler(0, rotationAmount, 0);
-            Debug.Log("Rotating: " + rotationAmount);
-
-
-            // float rotationAmount = Mathf.Clamp(dragDistance / 3f, -maxRotationAngle, maxRotationAngle);
-            // Quaternion targetRotation = Quaternion.Euler(0, rotationAmount, 0);
-            // // Smooth interpolation between current and target rotation
-            // transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
-
-            touchStartPos = touchCurrentPos;
-            // Stop any running reset coroutine to prevent interference
-            //StopCoroutine(nameof(ResetRotationSmoothly));
-        }
-        else if (!isResettingRotation)
-        {
-            //StartCoroutine(ResetRotationSmoothly());
-        }
-    }
-
     private IEnumerator ResetRotationSmoothly()
     {
         isResettingRotation = true;
         yield return new WaitForSeconds(rotationResetDelay);
         while (Mathf.Abs(transform.rotation.eulerAngles.y) > 0.1f)
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.identity, Time.deltaTime * 5f);
+            Quaternion targetRotation = Quaternion.Euler(0, 0, 0);
+            Quaternion newRotation = Quaternion.Slerp(playerRigidbody.rotation, targetRotation, Time.deltaTime * 5f);
+            playerRigidbody.MoveRotation(newRotation);
             yield return null;
         }
-        transform.rotation = Quaternion.identity;
+        playerRigidbody.MoveRotation(Quaternion.Euler(0, 0, 0));
         isResettingRotation = false;
     }
 

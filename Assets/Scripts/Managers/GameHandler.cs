@@ -57,7 +57,7 @@ public class GameHandler : MonoBehaviour
         GameManager.CurrentState = GameManager.GameState.GameOver;
         GameManager.IsPlayerRiding = false;
         //move player to the right + 1.5f translate
-        player.position = new Vector3(player.position.x + 1.5f, player.position.y, player.position.z);
+        //player.position = new Vector3(player.position.x + 1.5f, player.position.y, player.position.z);
         StartCoroutine(ShowGameOverScreen());
         // gameOverUI.SetActive(true);
         //player.gameObject.SetActive(false); // Hide player
